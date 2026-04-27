@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMate | Demos en Acción</title>
+    <meta name="description" content="Mira automatizaciones reales construidas con n8n e IA. Flujos de trabajo en acción, listos para inspirar tu negocio.">
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ============================================
+           BRAND PALETTE — KEEP IN SYNC WITH index.html.
+           To re-skin the site: copy the active :root
+           block from index.html and paste it here.
+           ============================================ */
+
+        /* ACTIVE PALETTE — Palette A (Indigo / Cyan) */
+        :root {
+            --color-primary:       #6366f1;
+            --color-primary-dark:  #4f46e5;
+            --color-secondary:     #06b6d4;
+            --color-accent:        #8b5cf6;
+            --color-success:       #10b981;
+            --color-danger:        #f43f5e;
+            --color-bg:            #0f0f1a;
+            --color-surface:       #1a1a2e;
+            --color-border:        #2a2a4a;
+            --color-text:          #e2e8f0;
+            --color-text-muted:    #94a3b8;
+            --color-primary-rgb:   99, 102, 241;
+            --color-secondary-rgb: 6, 182, 212;
+            --color-accent-rgb:    139, 92, 246;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+
+        /* Brand utility classes (mirror of index.html) */
+        .brand-text { color: var(--color-primary); }
+        .brand-text-secondary { color: var(--color-secondary); }
+        .brand-bg { background-color: var(--color-primary); }
+        .brand-bg-tint { background-color: rgba(var(--color-primary-rgb), 0.15); }
+        .brand-bg-tint-soft { background-color: rgba(var(--color-primary-rgb), 0.10); }
+        .brand-border-soft { border-color: rgba(var(--color-primary-rgb), 0.30); }
+        .brand-gradient {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        }
+        .brand-gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand-btn {
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgba(var(--color-primary-rgb), 0.25);
+        }
+        .brand-btn:hover {
+            background: linear-gradient(135deg, var(--color-primary), #818cf8);
+            box-shadow: 0 20px 25px -5px rgba(var(--color-primary-rgb), 0.40);
+        }
+        .brand-bg-hover:hover { background-color: var(--color-primary-dark); }
+
+        /* Section divider gradient */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.4), rgba(var(--color-secondary-rgb), 0.4), transparent);
+        }
+
+        /* Nav (mirror of index.html visual) */
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.3), transparent);
+        }
+
+        .nav-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+        }
+        .nav-dropdown.show,
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .nav-dropdown-item {
+            transition: background-color 0.15s ease, padding-left 0.15s ease;
+        }
+        .nav-dropdown-item:hover {
+            padding-left: 1.25rem;
+            background-color: rgba(var(--color-primary-rgb), 0.15);
+        }
+
+        /* Lang toggle (same as index.html) */
+        .lang-toggle {
+            position: relative;
+            display: inline-flex;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+        }
+        .lang-btn:not(.active) {
+            background: rgba(51, 65, 85, 0.5);
+            color: #94a3b8;
+        }
+        .lang-btn:not(.active):hover {
+            color: #e2e8f0;
+            background: rgba(51, 65, 85, 0.8);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+        .mobile-menu.open {
+            max-height: 600px;
+            opacity: 1;
+        }
+        .mobile-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .mobile-submenu.open {
+            max-height: 400px;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* Demo card (16:9) */
+        .demo-aspect {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.75rem;
+            background: var(--color-surface);
+        }
+        .demo-aspect iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Loom facade thumbnail click-target */
+        .loom-facade {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .loom-facade img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .loom-facade::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+            transition: background 0.25s ease;
+        }
+        .loom-facade:hover::after {
+            background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%);
+        }
+        .loom-facade-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .loom-facade-play span {
+            width: 64px;
+            height: 64px;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+            box-shadow: 0 10px 25px -5px rgba(var(--color-primary-rgb), 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.25s ease;
+        }
+        .loom-facade:hover .loom-facade-play span {
+            transform: scale(1.08);
+        }
+
+        /* Demo card wrapper */
+        .demo-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+        .demo-card:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+        .demo-card-anchor {
+            scroll-margin-top: 90px;
+        }
+
+        /* Reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 font-sans antialiased">
+
+    <!-- NAVIGATION (mirror of index.html) -->
+    <nav id="main-nav" class="fixed w-full z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center flex-shrink-0">
+                    <a href="index.html" class="text-xl font-bold text-white tracking-tighter">
+                        <span class="brand-text">Auto</span>Mate
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-1">
+                    <div class="nav-item relative">
+                        <button class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
+                            <span data-i18n="nav_services">Servicios</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                        </button>
+                        <div class="nav-dropdown absolute right-0 top-full mt-2 w-72 bg-slate-900/95 backdrop-blur-xl border border-slate-700/60 rounded-xl shadow-2xl shadow-black/40 py-2 z-50">
+                            <a href="index.html#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg brand-bg-tint flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bot" class="w-4 h-4 brand-text"></i>
+                                </span>
+                                <span class="font-semibold" data-i18n="nav_ai_agents">Agentes de IA</span>
+                            </a>
+                            <a href="index.html#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-secondary-rgb), 0.15);">
+                                    <i data-lucide="globe" class="w-4 h-4 brand-text-secondary"></i>
+                                </span>
+                                <span class="font-semibold" data-i18n="nav_web_dev">Desarrollo Web</span>
+                            </a>
+                            <a href="index.html#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                                    <i data-lucide="code-2" class="w-4 h-4" style="color: var(--color-accent);"></i>
+                                </span>
+                                <span class="font-semibold" data-i18n="nav_custom_software">Software a la Medida</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="demos.html" class="px-4 py-2 text-sm font-medium text-white rounded-lg bg-slate-800/60 transition-all duration-200">
+                        <span data-i18n="nav_demos">Vélo en Acción</span>
+                    </a>
+
+                    <a href="index.html#contact" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
+                        <span data-i18n="nav_contact">Contáctanos</span>
+                    </a>
+
+                    <div class="w-px h-6 bg-slate-700/60 mx-2"></div>
+
+                    <div class="lang-toggle border border-slate-700/50">
+                        <button class="lang-btn active" data-lang="es" onclick="switchLang('es')">ES</button>
+                        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    </div>
+
+                    <div class="w-px h-6 bg-slate-700/60 mx-2"></div>
+
+                    <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                        class="brand-btn px-5 py-2 rounded-full text-sm font-bold">
+                        <span data-i18n="nav_cta">Auditoría Gratis 30 Min</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-3">
+                    <div class="lang-toggle border border-slate-700/50">
+                        <button class="lang-btn active" data-lang="es" onclick="switchLang('es')">ES</button>
+                        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-slate-800/60 transition">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-slate-900/95 backdrop-blur-xl border-t border-slate-800">
+            <div class="px-4 py-4 space-y-1">
+                <a href="index.html#services" class="block px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
+                    <span data-i18n="nav_services">Servicios</span>
+                </a>
+                <a href="demos.html" class="block px-4 py-3 text-sm font-medium text-white rounded-lg bg-slate-800/60">
+                    <span data-i18n="nav_demos">Vélo en Acción</span>
+                </a>
+                <a href="index.html#contact" class="block px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
+                    <span data-i18n="nav_contact">Contáctanos</span>
+                </a>
+                <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                    class="brand-btn block text-center px-5 py-3 rounded-xl text-sm font-bold mt-3">
+                    <span data-i18n="nav_cta">Auditoría Gratis 30 Min</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="relative pt-32 pb-12 lg:pt-40 lg:pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6">
+                <span data-i18n="demos_title">Ve Nuestras Automatizaciones en Acción</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg text-slate-400" data-i18n="demos_subtitle">
+                Flujos reales que hemos construido para negocios reales. Dale play a cualquier demo para ver cómo podría verse tu negocio.
+            </p>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- VIDEO GRID -->
+    <section class="py-16 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Demo 1 -->
+                <div id="demo-1" class="demo-card demo-card-anchor reveal reveal-delay-1">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_1">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_1-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_ai">Agente IA</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_1_title">Agente IA de Soporte al Cliente</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_1_desc">Chatbot conversacional que responde preguntas frecuentes y escala consultas complejas a humanos.</p>
+                    </div>
+                </div>
+
+                <!-- Demo 2 -->
+                <div id="demo-2" class="demo-card demo-card-anchor reveal reveal-delay-2">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_2">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_2-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_automation">Automatización</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_2_title">Recordatorios de Pago Automatizados</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_2_desc">Lee la hoja de cálculo de cuentas por cobrar y envía recordatorios personalizados sin intervención humana.</p>
+                    </div>
+                </div>
+
+                <!-- Demo 3 -->
+                <div id="demo-3" class="demo-card demo-card-anchor reveal reveal-delay-3">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_3">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_3-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_ai">Agente IA</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_3_title">IA WhatsApp + Integración CRM</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_3_desc">Agente de WhatsApp que califica leads y los registra automáticamente en el CRM.</p>
+                    </div>
+                </div>
+
+                <!-- Demo 4 -->
+                <div id="demo-4" class="demo-card demo-card-anchor reveal reveal-delay-1">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_4">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_4-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_automation">Automatización</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_4_title">Reservas por Messenger Automatizadas</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_4_desc">Chatbot de Messenger que gestiona reservas de citas y bloquea calendarios automáticamente.</p>
+                    </div>
+                </div>
+
+                <!-- Demo 5 -->
+                <div id="demo-5" class="demo-card demo-card-anchor reveal reveal-delay-2">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_5">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_5-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_automation">Automatización</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_5_title">Procesador de Adjuntos de Correo</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_5_desc">Extrae adjuntos de Gmail y los carga organizadamente a tu base de datos en segundos.</p>
+                    </div>
+                </div>
+
+                <!-- Demo 6 -->
+                <div id="demo-6" class="demo-card demo-card-anchor reveal reveal-delay-3">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_6">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_6-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_scraping">Web Scraping</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_6_title">Sistema de Extracción de Leads</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_6_desc">Extrae leads de correos, los clasifica con IA y los inserta en el CRM automáticamente.</p>
+                    </div>
+                </div>
+
+                <!-- Demo 7 -->
+                <div id="demo-7" class="demo-card demo-card-anchor reveal reveal-delay-1">
+                    <div class="demo-aspect">
+                        <div class="loom-facade" data-video-id="PLACEHOLDER_7">
+                            <img src="https://cdn.loom.com/sessions/thumbnails/PLACEHOLDER_7-with-play.gif" loading="lazy" alt="">
+                            <div class="loom-facade-play"><span><i data-lucide="play" class="w-7 h-7"></i></span></div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block brand-bg text-white text-xs font-bold px-3 py-1 rounded-full mb-3" data-i18n="demo_cat_custom">Personalizado</span>
+                        <h3 class="text-lg font-bold text-white mb-2" data-i18n="demo_7_title">Demo de Flujo Personalizado</h3>
+                        <p class="text-sm text-slate-400" data-i18n="demo_7_desc">Ejemplo de un flujo construido a medida para necesidades específicas de un cliente.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- BOTTOM CTA -->
+    <section class="py-20 bg-slate-950">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 reveal" data-i18n="demos_cta_title">¿Quieres un flujo como estos?</h2>
+            <p class="text-slate-400 mb-8 reveal" data-i18n="demos_cta_subtitle">Auditoría gratis de 30 minutos. Sin compromiso.</p>
+            <a href="index.html#contact" class="brand-btn inline-flex items-center px-8 py-4 rounded-xl font-bold reveal">
+                <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                <span data-i18n="demos_cta_btn">Obtén Tu Auditoría Gratis</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-slate-800 text-center">
+        <p class="text-slate-500 text-sm" data-i18n="footer_text">© 2024 AutoMate. Construido con código, impulsado por IA.</p>
+    </footer>
+
+    <script>
+        // ===== I18N =====
+        const translations = {
+            es: {
+                nav_services: "Servicios",
+                nav_ai_agents: "Agentes de IA",
+                nav_web_dev: "Desarrollo Web",
+                nav_custom_software: "Software a la Medida",
+                nav_demos: "Vélo en Acción",
+                nav_contact: "Contáctanos",
+                nav_cta: "Auditoría Gratis 30 Min",
+
+                demos_title: "Ve Nuestras Automatizaciones en Acción",
+                demos_subtitle: "Flujos reales que hemos construido para negocios reales. Dale play a cualquier demo para ver cómo podría verse tu negocio.",
+
+                demo_cat_ai: "Agente IA",
+                demo_cat_automation: "Automatización",
+                demo_cat_scraping: "Web Scraping",
+                demo_cat_custom: "Personalizado",
+
+                demo_1_title: "Agente IA de Soporte al Cliente",
+                demo_1_desc: "Chatbot conversacional que responde preguntas frecuentes y escala consultas complejas a humanos.",
+                demo_2_title: "Recordatorios de Pago Automatizados",
+                demo_2_desc: "Lee la hoja de cálculo de cuentas por cobrar y envía recordatorios personalizados sin intervención humana.",
+                demo_3_title: "IA WhatsApp + Integración CRM",
+                demo_3_desc: "Agente de WhatsApp que califica leads y los registra automáticamente en el CRM.",
+                demo_4_title: "Reservas por Messenger Automatizadas",
+                demo_4_desc: "Chatbot de Messenger que gestiona reservas de citas y bloquea calendarios automáticamente.",
+                demo_5_title: "Procesador de Adjuntos de Correo",
+                demo_5_desc: "Extrae adjuntos de Gmail y los carga organizadamente a tu base de datos en segundos.",
+                demo_6_title: "Sistema de Extracción de Leads",
+                demo_6_desc: "Extrae leads de correos, los clasifica con IA y los inserta en el CRM automáticamente.",
+                demo_7_title: "Demo de Flujo Personalizado",
+                demo_7_desc: "Ejemplo de un flujo construido a medida para necesidades específicas de un cliente.",
+
+                demos_cta_title: "¿Quieres un flujo como estos?",
+                demos_cta_subtitle: "Auditoría gratis de 30 minutos. Sin compromiso.",
+                demos_cta_btn: "Obtén Tu Auditoría Gratis",
+
+                footer_text: "© 2024 AutoMate. Construido con código, impulsado por IA.",
+            },
+            en: {
+                nav_services: "Services",
+                nav_ai_agents: "AI Agents",
+                nav_web_dev: "Website Development",
+                nav_custom_software: "Custom Software",
+                nav_demos: "See It In Action",
+                nav_contact: "Contact Us",
+                nav_cta: "Free 30-Min Audit",
+
+                demos_title: "See Our Automations In Action",
+                demos_subtitle: "Real workflows we've built for real businesses. Click play on any demo to see exactly what your business could look like.",
+
+                demo_cat_ai: "AI Agent",
+                demo_cat_automation: "Automation",
+                demo_cat_scraping: "Web Scraping",
+                demo_cat_custom: "Custom",
+
+                demo_1_title: "AI Customer Support Agent",
+                demo_1_desc: "Conversational chatbot that answers FAQs and escalates complex queries to humans.",
+                demo_2_title: "Automated Payment Reminders",
+                demo_2_desc: "Reads the receivables spreadsheet and sends personalized reminders with zero human intervention.",
+                demo_3_title: "WhatsApp AI + CRM Integration",
+                demo_3_desc: "WhatsApp agent that qualifies leads and logs them into the CRM automatically.",
+                demo_4_title: "Messenger Booking Automation",
+                demo_4_desc: "Messenger chatbot that handles appointment bookings and blocks calendars automatically.",
+                demo_5_title: "Email Attachment Processor",
+                demo_5_desc: "Extracts attachments from Gmail and loads them into your database in seconds.",
+                demo_6_title: "Lead Extraction System",
+                demo_6_desc: "Extracts leads from emails, classifies them with AI, and inserts them into the CRM automatically.",
+                demo_7_title: "Custom Workflow Demo",
+                demo_7_desc: "An example of a workflow built bespoke for a specific client need.",
+
+                demos_cta_title: "Want a workflow like these?",
+                demos_cta_subtitle: "Free 30-minute audit. No commitment.",
+                demos_cta_btn: "Get Your Free Audit",
+
+                footer_text: "© 2024 AutoMate. Built with code, powered by AI.",
+            }
+        };
+
+        let currentLang = 'es';
+
+        function switchLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            document.title = lang === 'es'
+                ? 'AutoMate | Demos en Acción'
+                : 'AutoMate | Demos In Action';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerHTML = translations[lang][key];
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+
+            lucide.createIcons();
+        }
+
+        // ===== Mobile Menu =====
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
+
+        // ===== Loom Facade =====
+        // Replaces the static thumbnail with the real iframe on first click —
+        // keeps initial page weight low (no Loom JS until user opts in).
+        document.querySelectorAll('.loom-facade').forEach(facade => {
+            facade.addEventListener('click', function () {
+                const videoId = this.dataset.videoId;
+                if (!videoId || videoId.startsWith('PLACEHOLDER')) {
+                    alert(currentLang === 'es'
+                        ? 'Video pendiente. Pega el ID real de Loom en data-video-id.'
+                        : 'Video pending. Paste the real Loom ID in data-video-id.');
+                    return;
+                }
+                const iframe = document.createElement('iframe');
+                iframe.src = `https://www.loom.com/embed/${videoId}?autoplay=1`;
+                iframe.allow = 'autoplay; fullscreen';
+                iframe.setAttribute('allowfullscreen', '');
+                this.parentNode.replaceChild(iframe, this);
+            });
+        });
+
+        // ===== Reveal on scroll =====
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // Init Lucide icons
+        lucide.createIcons();
+
+        // ===== Anchor scroll for deep-linked demo cards =====
+        // If URL has #demo-N on load, give the page a tick to render then scroll.
+        if (window.location.hash) {
+            window.addEventListener('load', () => {
+                const target = document.querySelector(window.location.hash);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+    </script>
+</body>
+
+</html>

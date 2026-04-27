@@ -24,6 +24,261 @@
         }
     </script>
     <style>
+        /* ============================================
+           BRAND PALETTE — EDIT ONLY THIS SECTION
+           TO CHANGE THE ENTIRE SITE'S COLOR SCHEME.
+           Copy these same variables to demos.html too.
+           ============================================ */
+
+        /* ACTIVE PALETTE — Palette A (Indigo / Cyan) */
+        :root {
+            --color-primary:       #6366f1;   /* main brand — buttons, highlights */
+            --color-primary-dark:  #4f46e5;   /* hover states */
+            --color-secondary:     #06b6d4;   /* accent — result lines, dividers */
+            --color-accent:        #8b5cf6;   /* third accent — custom software */
+            --color-success:       #10b981;   /* positive states, after-cards */
+            --color-danger:        #f43f5e;   /* negative/urgent — voice AI, before-cards */
+            --color-bg:            #0f0f1a;   /* page background */
+            --color-surface:       #1a1a2e;   /* card backgrounds */
+            --color-border:        #2a2a4a;   /* card borders */
+            --color-text:          #e2e8f0;   /* body text */
+            --color-text-muted:    #94a3b8;   /* secondary text */
+
+            /* RGB triplets for rgba() composition */
+            --color-primary-rgb:   99, 102, 241;
+            --color-secondary-rgb: 6, 182, 212;
+            --color-accent-rgb:    139, 92, 246;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+
+        /* ============================================
+           PALETTE B — Amber / Emerald (A/B test option)
+           To activate: comment out Palette A above,
+           uncomment this block, save, and redeploy.
+           ============================================
+        :root {
+            --color-primary:       #f59e0b;
+            --color-primary-dark:  #d97706;
+            --color-secondary:     #10b981;
+            --color-accent:        #ef4444;
+            --color-success:       #10b981;
+            --color-danger:        #f43f5e;
+            --color-bg:            #0f0f0f;
+            --color-surface:       #1a1a1a;
+            --color-border:        #2a2a2a;
+            --color-text:          #f1f5f9;
+            --color-text-muted:    #94a3b8;
+            --color-primary-rgb:   245, 158, 11;
+            --color-secondary-rgb: 16, 185, 129;
+            --color-accent-rgb:    239, 68, 68;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+        */
+
+        /* ============================================
+           PALETTE C — Slate / Rose (A/B test option)
+           To activate: comment out active palette,
+           uncomment this block, save, and redeploy.
+           ============================================
+        :root {
+            --color-primary:       #e11d48;
+            --color-primary-dark:  #be123c;
+            --color-secondary:     #38bdf8;
+            --color-accent:        #a78bfa;
+            --color-success:       #10b981;
+            --color-danger:        #f43f5e;
+            --color-bg:            #0f1117;
+            --color-surface:       #1e2130;
+            --color-border:        #2e3347;
+            --color-text:          #f1f5f9;
+            --color-text-muted:    #94a3b8;
+            --color-primary-rgb:   225, 29, 72;
+            --color-secondary-rgb: 56, 189, 248;
+            --color-accent-rgb:    167, 139, 250;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+        */
+
+        /* ===== BRAND UTILITY CLASSES =====
+           Use these instead of Tailwind brand-color utilities. */
+        .brand-text { color: var(--color-primary); }
+        .brand-text-secondary { color: var(--color-secondary); }
+        .brand-text-accent { color: var(--color-accent); }
+        .brand-bg { background-color: var(--color-primary); }
+        .brand-bg-dark { background-color: var(--color-primary-dark); }
+        .brand-bg-tint { background-color: rgba(var(--color-primary-rgb), 0.15); }
+        .brand-bg-tint-soft { background-color: rgba(var(--color-primary-rgb), 0.10); }
+        .brand-border { border-color: var(--color-primary); }
+        .brand-border-soft { border-color: rgba(var(--color-primary-rgb), 0.30); }
+
+        .brand-gradient {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        }
+        .brand-gradient-primary {
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+        }
+        .brand-gradient-secondary {
+            background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary));
+        }
+        .brand-gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand-shadow {
+            box-shadow: 0 10px 15px -3px rgba(var(--color-primary-rgb), 0.25), 0 4px 6px -4px rgba(var(--color-primary-rgb), 0.25);
+        }
+        .brand-shadow-strong {
+            box-shadow: 0 20px 25px -5px rgba(var(--color-primary-rgb), 0.40), 0 8px 10px -6px rgba(var(--color-primary-rgb), 0.40);
+        }
+        .brand-shadow-secondary {
+            box-shadow: 0 10px 15px -3px rgba(var(--color-secondary-rgb), 0.30), 0 4px 6px -4px rgba(var(--color-secondary-rgb), 0.30);
+        }
+
+        .brand-btn {
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgba(var(--color-primary-rgb), 0.25);
+        }
+        .brand-btn:hover {
+            background: linear-gradient(135deg, var(--color-primary), #818cf8);
+            box-shadow: 0 20px 25px -5px rgba(var(--color-primary-rgb), 0.40);
+        }
+
+        /* Service-card border hover variants */
+        .svc-hover-primary:hover   { border-color: rgba(var(--color-primary-rgb), 0.40) !important; }
+        .svc-hover-secondary:hover { border-color: rgba(var(--color-secondary-rgb), 0.40) !important; }
+        .svc-hover-accent:hover    { border-color: rgba(var(--color-accent-rgb), 0.40) !important; }
+        .svc-hover-danger:hover    { border-color: rgba(var(--color-danger-rgb), 0.40) !important; }
+        .svc-hover-success:hover   { border-color: rgba(var(--color-success-rgb), 0.40) !important; }
+
+        /* Hover variants for brand utility classes */
+        .brand-bg-hover:hover { background-color: var(--color-primary-dark); }
+        .brand-border-focus:focus { border-color: var(--color-primary); }
+
+        /* Semantic state colors */
+        .state-danger-text { color: var(--color-danger); }
+        .state-success-text { color: var(--color-success); }
+        .state-danger-bg-tint { background-color: rgba(var(--color-danger-rgb), 0.05); }
+        .state-success-bg-tint { background-color: rgba(var(--color-success-rgb), 0.05); }
+        .state-danger-border-tint { border-color: rgba(var(--color-danger-rgb), 0.10); }
+
+        /* ===== ANIMATED GRID BACKGROUND ===== */
+        .hero-grid-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-grid-bg::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background-image:
+                linear-gradient(rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        .hero-grid-bg::after {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background-image:
+                linear-gradient(rgba(var(--color-secondary-rgb), 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(var(--color-secondary-rgb), 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse2 12s ease-in-out infinite;
+            transform: translate(30px, 30px);
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1) translate(0, 0); }
+            50% { opacity: 1; transform: scale(1.02) translate(-5px, -5px); }
+        }
+
+        @keyframes gridPulse2 {
+            0%, 100% { opacity: 0.3; transform: scale(1) translate(30px, 30px); }
+            50% { opacity: 0.8; transform: scale(1.03) translate(25px, 25px); }
+        }
+
+        /* ===== GLOWING ORBS ===== */
+        .orb-indigo {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-cyan {
+            position: absolute;
+            bottom: -15%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(var(--color-secondary-rgb), 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== SECTION DIVIDER ===== */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.4), rgba(var(--color-secondary-rgb), 0.4), transparent);
+        }
+
+        /* ===== SERVICE CARD GLOW ===== */
+        .service-card:hover {
+            box-shadow: 0 0 24px rgba(var(--color-primary-rgb), 0.2);
+        }
+
+        /* ===== HOW IT WORKS TIMELINE =====
+           top: 32px = vertical center of the 64px (w-16 h-16) step circles. */
+        .timeline-connector {
+            position: absolute;
+            top: 32px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-top: 2px dashed rgba(var(--color-primary-rgb), 0.3);
+            z-index: 0;
+        }
+
+        /* ===== CONTACT GLOW CARD ===== */
+        .contact-glow {
+            position: relative;
+            border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.05), rgba(var(--color-secondary-rgb), 0.03));
+        }
+
+        .contact-glow::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 1.5rem;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.4), rgba(var(--color-secondary-rgb), 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* ===== EXISTING ANIMATIONS ===== */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
@@ -53,6 +308,43 @@
             left: 0;
             width: 100%;
             height: 100%;
+        }
+
+        /* Portfolio thumbnail (replaces inline iframes on landing page).
+           Hover overlay → links to demos.html for the actual playback. */
+        .portfolio-thumb {
+            position: relative;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+        .portfolio-thumb:hover {
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+        .portfolio-thumb-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .portfolio-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.9;
+            transition: opacity 0.25s ease, background 0.25s ease;
+        }
+        .portfolio-thumb:hover .portfolio-thumb-overlay {
+            opacity: 1;
+            background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%);
         }
 
         /* Scroll Reveal Animation */
@@ -95,7 +387,7 @@
 
         .nav-dropdown-item:hover {
             padding-left: 1.25rem;
-            background-color: rgba(99, 102, 241, 0.15);
+            background-color: rgba(var(--color-primary-rgb), 0.15);
         }
 
         /* Language toggle */
@@ -118,7 +410,7 @@
         }
 
         .lang-btn.active {
-            background: linear-gradient(135deg, #6366f1, #06b6d4);
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             color: white;
         }
 
@@ -163,7 +455,21 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.3), transparent);
+        }
+
+        /* ===== SOCIAL PROOF AVATARS ===== */
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            border: 2px solid rgba(15, 23, 42, 0.8);
         }
     </style>
 </head>
@@ -177,7 +483,7 @@
                 <!-- Logo -->
                 <div class="flex items-center flex-shrink-0">
                     <a href="#" class="text-xl font-bold text-white tracking-tighter">
-                        <span class="text-indigo-500">Auto</span>Mate
+                        <span class="brand-text">Auto</span>Mate
                     </a>
                 </div>
 
@@ -191,8 +497,8 @@
                         </button>
                         <div class="nav-dropdown absolute right-0 top-full mt-2 w-72 bg-slate-900/95 backdrop-blur-xl border border-slate-700/60 rounded-xl shadow-2xl shadow-black/40 py-2 z-50">
                             <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
-                                <span class="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="bot" class="w-4 h-4 text-indigo-400"></i>
+                                <span class="w-8 h-8 rounded-lg brand-bg-tint flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bot" class="w-4 h-4 brand-text"></i>
                                 </span>
                                 <div>
                                     <span class="font-semibold block" data-i18n="nav_ai_agents">Agentes de IA</span>
@@ -200,8 +506,8 @@
                                 </div>
                             </a>
                             <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
-                                <span class="w-8 h-8 rounded-lg bg-cyan-500/15 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="globe" class="w-4 h-4 text-cyan-400"></i>
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-secondary-rgb), 0.15);">
+                                    <i data-lucide="globe" class="w-4 h-4 brand-text-secondary"></i>
                                 </span>
                                 <div>
                                     <span class="font-semibold block" data-i18n="nav_web_dev">Desarrollo Web</span>
@@ -209,8 +515,8 @@
                                 </div>
                             </a>
                             <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
-                                <span class="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="smartphone" class="w-4 h-4 text-violet-400"></i>
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                                    <i data-lucide="smartphone" class="w-4 h-4 brand-text-accent"></i>
                                 </span>
                                 <div>
                                     <span class="font-semibold block" data-i18n="nav_app_building">Desarrollo de Apps</span>
@@ -235,8 +541,43 @@
                                     <span class="text-xs text-slate-500" data-i18n="nav_data_analysis_desc">Pipelines de datos y visualización</span>
                                 </div>
                             </a>
+                            <!-- NEW: Voice AI Agents -->
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-danger-rgb), 0.15);">
+                                    <i data-lucide="phone-call" class="w-4 h-4 state-danger-text"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_voice_agents">Agentes de Voz con IA</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_voice_agents_desc">IA telefónica entrante y saliente</span>
+                                </div>
+                            </a>
+                            <!-- NEW: Lead Generation System -->
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-success-rgb), 0.15);">
+                                    <i data-lucide="target" class="w-4 h-4 state-success-text"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_leads">Sistema de Generación de Leads</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_leads_desc">Embudo automatizado completo</span>
+                                </div>
+                            </a>
+                            <!-- NEW: Custom Software -->
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                                    <i data-lucide="code-2" class="w-4 h-4 brand-text-accent"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_custom_software">Software a la Medida</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_custom_software_desc">Construido exactamente a tu medida</span>
+                                </div>
+                            </a>
                         </div>
                     </div>
+
+                    <!-- See It In Action (Demos) -->
+                    <a href="demos.html" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
+                        <span data-i18n="nav_demos">Vélo en Acción</span>
+                    </a>
 
                     <!-- Contact Us -->
                     <a href="#contact" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
@@ -257,7 +598,7 @@
 
                     <!-- CTA Button -->
                     <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
-                        class="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white px-5 py-2 rounded-full text-sm font-bold transition-all duration-200 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40">
+                        class="brand-btn px-5 py-2 rounded-full text-sm font-bold">
                         <span data-i18n="nav_cta">Auditoría Gratis 30 Min</span>
                     </a>
                 </div>
@@ -285,15 +626,15 @@
                 </button>
                 <div id="mobile-submenu" class="mobile-submenu pl-4 space-y-1">
                     <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
-                        <i data-lucide="bot" class="w-4 h-4 text-indigo-400"></i>
+                        <i data-lucide="bot" class="w-4 h-4 brand-text"></i>
                         <span data-i18n="nav_ai_agents">Agentes de IA</span>
                     </a>
                     <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
-                        <i data-lucide="globe" class="w-4 h-4 text-cyan-400"></i>
+                        <i data-lucide="globe" class="w-4 h-4 brand-text-secondary"></i>
                         <span data-i18n="nav_web_dev">Desarrollo Web</span>
                     </a>
                     <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
-                        <i data-lucide="smartphone" class="w-4 h-4 text-violet-400"></i>
+                        <i data-lucide="smartphone" class="w-4 h-4 brand-text-accent"></i>
                         <span data-i18n="nav_app_building">Desarrollo de Apps</span>
                     </a>
                     <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
@@ -304,7 +645,27 @@
                         <i data-lucide="bar-chart-3" class="w-4 h-4 text-amber-400"></i>
                         <span data-i18n="nav_data_analysis">Análisis de Datos (ETL & Dashboards)</span>
                     </a>
+                    <!-- NEW: Voice AI Agents -->
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="phone-call" class="w-4 h-4 state-danger-text"></i>
+                        <span data-i18n="nav_voice_agents">Agentes de Voz con IA</span>
+                    </a>
+                    <!-- NEW: Lead Generation -->
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="target" class="w-4 h-4 state-success-text"></i>
+                        <span data-i18n="nav_leads">Sistema de Generación de Leads</span>
+                    </a>
+                    <!-- NEW: Custom Software -->
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="code-2" class="w-4 h-4 brand-text-accent"></i>
+                        <span data-i18n="nav_custom_software">Software a la Medida</span>
+                    </a>
                 </div>
+
+                <!-- Mobile See It In Action -->
+                <a href="demos.html" class="block px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
+                    <span data-i18n="nav_demos">Vélo en Acción</span>
+                </a>
 
                 <!-- Mobile Contact -->
                 <a href="#contact" onclick="closeMobileMenu()" class="block px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
@@ -313,7 +674,7 @@
 
                 <!-- Mobile CTA -->
                 <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
-                    class="block text-center bg-gradient-to-r from-indigo-600 to-indigo-500 text-white px-5 py-3 rounded-xl text-sm font-bold mt-3 shadow-lg shadow-indigo-500/25">
+                    class="brand-btn block text-center px-5 py-3 rounded-xl text-sm font-bold mt-3">
                     <span data-i18n="nav_cta">Auditoría Gratis 30 Min</span>
                 </a>
             </div>
@@ -322,18 +683,24 @@
 
     <!-- HERO SECTION -->
     <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+        <!-- Animated grid background -->
+        <div class="hero-grid-bg"></div>
+        <!-- Glowing orbs -->
+        <div class="orb-indigo"></div>
+        <div class="orb-cyan"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <div
-                class="inline-flex items-center px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm font-medium mb-8">
+                class="inline-flex items-center px-4 py-2 rounded-full brand-border-soft brand-bg-tint-soft brand-text text-sm font-medium mb-8 border">
                 <i data-lucide="zap" class="w-4 h-4 mr-2"></i>
-                <span data-i18n="hero_badge">Automatización Personalizada para PYMEs</span>
+                <span data-i18n="hero_badge">Ahorra +10 Horas/Semana por Empleado</span>
             </div>
             <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8">
                 <span data-i18n="hero_title_1">Deja de Hacer </span><span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400" data-i18n="hero_title_2">Trabajo Aburrido.</span>
+                    class="brand-gradient-text" data-i18n="hero_title_2">Trabajo Aburrido.</span>
             </h1>
             <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400" data-i18n="hero_description">
-                Construyo <strong>flujos de trabajo con n8n</strong> y <strong>Agentes de IA</strong> que manejan la extracción de datos, procesamiento de leads y tareas administrativas repetitivas para que tu equipo no tenga que hacerlo.
+                Tu equipo pierde horas en tareas que una herramienta de $10/mes podría resolver. Construimos las automatizaciones que los liberan — a ellos y a ti — para enfocarse en lo que realmente hace crecer tu negocio.
             </p>
             <div class="mt-10 flex flex-wrap justify-center gap-4">
                 <!-- GOOGLE CALENDAR LINK -->
@@ -353,8 +720,31 @@
                     <span data-i18n="hero_cta_whatsapp">Escríbenos por WhatsApp</span>
                 </a>
             </div>
+
+            <!-- SOCIAL PROOF BAR -->
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-slate-400">
+                <!-- Stars -->
+                <div class="flex items-center gap-1">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <!-- Text -->
+                <span data-i18n="hero_social_proof">Más de 10 empresas confían en nosotros</span>
+                <!-- Avatars -->
+                <div class="flex items-center -space-x-2">
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, var(--color-primary), var(--color-accent));">JM</div>
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, var(--color-secondary), #22d3ee);">SR</div>
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, #10b981, #34d399);">AK</div>
+                </div>
+            </div>
         </div>
     </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
 
     <!-- TECH STACK -->
     <section class="py-10 border-y border-slate-800 bg-slate-900/50 reveal">
@@ -374,55 +764,192 @@
         </div>
     </section>
 
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- PAIN POINTS / BEFORE-AFTER SECTION -->
+    <section id="pain-points" class="py-20 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center reveal" data-i18n="pain_title">¿Te suena familiar?</h2>
+            <p class="text-slate-400 text-center mb-16 max-w-2xl mx-auto reveal" data-i18n="pain_subtitle">Estos son los problemas que eliminamos para nuestros clientes.</p>
+            <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                <!-- Card 1 -->
+                <div class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden reveal reveal-delay-1 flex flex-col h-full">
+                    <div class="p-5 state-danger-bg-tint state-danger-border-tint border-b flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-danger-text text-lg">&#10060;</span>
+                            <span class="text-sm font-bold state-danger-text uppercase tracking-wider" data-i18n="pain_before_label">Antes</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_1_before">Copiando datos manualmente entre hojas de cálculo todos los días</p>
+                    </div>
+                    <div class="p-5 state-success-bg-tint flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-success-text text-lg">&#9989;</span>
+                            <span class="text-sm font-bold state-success-text uppercase tracking-wider" data-i18n="pain_after_label">Después</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_1_after">Los datos fluyen automáticamente entre todas tus herramientas</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden reveal reveal-delay-2 flex flex-col h-full">
+                    <div class="p-5 state-danger-bg-tint state-danger-border-tint border-b flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-danger-text text-lg">&#10060;</span>
+                            <span class="text-sm font-bold state-danger-text uppercase tracking-wider" data-i18n="pain_before_label">Antes</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_2_before">Perdiendo leads porque nadie respondió a tiempo</p>
+                    </div>
+                    <div class="p-5 state-success-bg-tint flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-success-text text-lg">&#9989;</span>
+                            <span class="text-sm font-bold state-success-text uppercase tracking-wider" data-i18n="pain_after_label">Después</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_2_after">Un agente de IA responde a cada lead en menos de 60 segundos, 24/7</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden reveal reveal-delay-3 flex flex-col h-full">
+                    <div class="p-5 state-danger-bg-tint state-danger-border-tint border-b flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-danger-text text-lg">&#10060;</span>
+                            <span class="text-sm font-bold state-danger-text uppercase tracking-wider" data-i18n="pain_before_label">Antes</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_3_before">Tu equipo pasa horas en trabajo administrativo repetitivo</p>
+                    </div>
+                    <div class="p-5 state-success-bg-tint flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-success-text text-lg">&#9989;</span>
+                            <span class="text-sm font-bold state-success-text uppercase tracking-wider" data-i18n="pain_after_label">Después</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_3_after">Los flujos de trabajo corren en piloto automático. Tu equipo se enfoca en trabajo real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="how-it-works" class="py-20 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center reveal" data-i18n="how_title">Así Funciona</h2>
+            <p class="text-slate-400 text-center mb-16 max-w-2xl mx-auto reveal" data-i18n="how_subtitle">De la primera llamada a resultados reales en 3 pasos simples.</p>
+            <div class="relative">
+                <!-- Dashed connector line (desktop only) -->
+                <div class="hidden lg:block timeline-connector" style="left: 16.67%; right: 16.67%;"></div>
+                <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="text-center reveal reveal-delay-1">
+                        <div class="w-16 h-16 rounded-full brand-gradient-primary brand-shadow flex items-center justify-center mx-auto mb-6 text-white text-2xl font-extrabold">1</div>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="how_step1_title">Auditoría Gratis de 30 Min</h3>
+                        <p class="text-sm text-slate-400" data-i18n="how_step1_desc">Mapeamos tus mayores pérdidas de tiempo e identificamos las 2-3 automatizaciones con mayor retorno de inversión.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="text-center reveal reveal-delay-2">
+                        <div class="w-16 h-16 rounded-full brand-gradient brand-shadow flex items-center justify-center mx-auto mb-6 text-white text-2xl font-extrabold">2</div>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="how_step2_title">Lo Construimos</h3>
+                        <p class="text-sm text-slate-400" data-i18n="how_step2_desc">En 1-2 semanas, tu flujo de trabajo personalizado está activo. No necesitas escribir código.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="text-center reveal reveal-delay-3">
+                        <div class="w-16 h-16 rounded-full brand-shadow-secondary flex items-center justify-center mx-auto mb-6 text-white text-2xl font-extrabold" style="background: linear-gradient(135deg, var(--color-secondary), #67e8f9);">3</div>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="how_step3_title">Ahorras Tiempo</h3>
+                        <p class="text-sm text-slate-400" data-i18n="how_step3_desc">Tu equipo recupera horas cada semana mientras los leads y datos fluyen automáticamente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
     <!-- SERVICES SECTION -->
     <section id="services" class="py-20 bg-slate-950">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center reveal" data-i18n="services_title">Nuestros Servicios</h2>
             <p class="text-slate-400 text-center mb-16 max-w-2xl mx-auto reveal" data-i18n="services_subtitle">Soluciones tecnológicas integrales para impulsar tu negocio al siguiente nivel.</p>
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Service 1 -->
-                <div class="group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-indigo-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-1">
-                    <div class="w-12 h-12 rounded-xl bg-indigo-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                        <i data-lucide="bot" class="w-6 h-6 text-indigo-400"></i>
+                <!-- Service 1: AI Agents -->
+                <div class="service-card svc-hover-primary group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-1">
+                    <div class="w-12 h-12 rounded-xl brand-bg-tint flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bot" class="w-6 h-6 brand-text"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_ai_title">Agentes de IA</h3>
                     <p class="text-sm text-slate-400" data-i18n="svc_ai_desc">Chatbots inteligentes y agentes conversacionales para WhatsApp, Messenger y tu sitio web que atienden clientes 24/7.</p>
+                    <p class="text-sm brand-text mt-3 font-medium" data-i18n="svc_ai_result">✦ Resultado: Responde al 100% de consultas, incluso a las 2am.</p>
                 </div>
-                <!-- Service 2 -->
-                <div class="group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-cyan-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-2">
-                    <div class="w-12 h-12 rounded-xl bg-cyan-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                        <i data-lucide="globe" class="w-6 h-6 text-cyan-400"></i>
+                <!-- Service 2: Web Dev -->
+                <div class="service-card svc-hover-secondary group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-2">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-secondary-rgb), 0.15);">
+                        <i data-lucide="globe" class="w-6 h-6 brand-text-secondary"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_web_title">Desarrollo Web</h3>
                     <p class="text-sm text-slate-400" data-i18n="svc_web_desc">Sitios web modernos, rápidos y optimizados para SEO que convierten visitantes en clientes.</p>
+                    <p class="text-sm brand-text-secondary mt-3 font-medium" data-i18n="svc_web_result">✦ Resultado: Sitios que cargan en &lt;2s y posicionan en Google.</p>
                 </div>
-                <!-- Service 3 -->
-                <div class="group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-violet-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-3">
-                    <div class="w-12 h-12 rounded-xl bg-violet-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
-                        <i data-lucide="smartphone" class="w-6 h-6 text-violet-400"></i>
+                <!-- Service 3: App Building -->
+                <div class="service-card svc-hover-accent group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-3">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                        <i data-lucide="smartphone" class="w-6 h-6 brand-text-accent"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_app_title">Desarrollo de Apps</h3>
                     <p class="text-sm text-slate-400" data-i18n="svc_app_desc">Aplicaciones móviles y de escritorio a medida para optimizar los procesos de tu empresa.</p>
+                    <p class="text-sm brand-text-accent mt-3 font-medium" data-i18n="svc_app_result">✦ Resultado: Reemplaza procesos manuales con flujos de un clic.</p>
                 </div>
-                <!-- Service 4 -->
-                <div class="group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-emerald-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-4">
+                <!-- Service 4: Web Scraping -->
+                <div class="service-card group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-emerald-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-4">
                     <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
                         <i data-lucide="scan-search" class="w-6 h-6 text-emerald-400"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_scraping_title">Web Scraping & Automatización</h3>
                     <p class="text-sm text-slate-400" data-i18n="svc_scraping_desc">Extracción automatizada de datos de cualquier sitio web. Monitoreo de precios, leads y competencia en piloto automático.</p>
+                    <p class="text-sm text-emerald-300 mt-3 font-medium" data-i18n="svc_scraping_result">✦ Resultado: Precios de competencia y leads diarios, automáticamente.</p>
                 </div>
-                <!-- Service 5 -->
-                <div class="group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-amber-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-5">
+                <!-- Service 5: Data Analysis -->
+                <div class="service-card group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-amber-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-5">
                     <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
                         <i data-lucide="bar-chart-3" class="w-6 h-6 text-amber-400"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_data_title">Análisis de Datos (ETL & Dashboards)</h3>
                     <p class="text-sm text-slate-400" data-i18n="svc_data_desc">Pipelines de datos, procesos ETL y dashboards interactivos para tomar decisiones basadas en datos reales.</p>
+                    <p class="text-sm text-amber-300 mt-3 font-medium" data-i18n="svc_data_result">✦ Resultado: Conoce tus números sin abrir una hoja de cálculo.</p>
+                </div>
+                <!-- Service 6: Voice AI Agents (NEW) — uses --color-danger -->
+                <div class="service-card svc-hover-danger group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-danger-rgb), 0.15);">
+                        <i data-lucide="phone-call" class="w-6 h-6 state-danger-text"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_voice_title">Agentes de Voz con IA</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_voice_desc">Agentes telefónicos con IA que atienden llamadas entrantes como recepcionistas Y realizan llamadas salientes para seguimiento de ventas, 24/7 sin tiempos de espera.</p>
+                    <p class="text-sm state-danger-text mt-3 font-medium" data-i18n="svc_voice_result">✦ Resultado: Nunca pierdas una llamada ni un lead por buzón de voz.</p>
+                </div>
+                <!-- Service 7: Lead Generation (NEW) — uses --color-success -->
+                <div class="service-card svc-hover-success group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-1">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-success-rgb), 0.15);">
+                        <i data-lucide="target" class="w-6 h-6 state-success-text"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_leads_title">Sistema de Generación de Leads</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_leads_desc">Un sistema de embudo completo que captura prospectos, los califica con IA y los nutre automáticamente hasta que estén listos para comprar, sin que tu equipo haga nada.</p>
+                    <p class="text-sm state-success-text mt-3 font-medium" data-i18n="svc_leads_result">✦ Resultado: Un pipeline que se llena solo mientras duermes.</p>
+                </div>
+                <!-- Service 8: Custom Software (NEW) -->
+                <div class="service-card svc-hover-accent group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-2">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                        <i data-lucide="code-2" class="w-6 h-6 brand-text-accent"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_custom_title">Software a la Medida</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_custom_desc">Si se puede construir, lo construimos. Desde herramientas internas y portales de clientes hasta aplicaciones personalizadas con IA — dinos qué necesitas y lo hacemos realidad.</p>
+                    <p class="text-sm brand-text-accent mt-3 font-medium" data-i18n="svc_custom_result">✦ Resultado: Software que se adapta a tu negocio, no al revés.</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
 
     <!-- PORTFOLIO / LOOM VIDEOS -->
     <section id="portfolio" class="py-20 bg-slate-900/30">
@@ -432,12 +959,18 @@
 
                 <!-- Project 1: Image Data Extraction -->
                 <div class="group reveal reveal-delay-1">
-                    <div class="video-container bg-slate-800 shadow-2xl mb-6 border border-slate-700">
-                        <iframe src="https://www.loom.com/embed/a62d9ef18f2247a79bee668cfb240116" frameborder="0"
-                            webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    </div>
+                    <a href="demos.html#demo-1" target="_blank" rel="noopener" class="portfolio-thumb video-container shadow-2xl mb-6 block">
+                        <img src="https://cdn.loom.com/sessions/thumbnails/a62d9ef18f2247a79bee668cfb240116-with-play.gif" loading="lazy" alt="" class="portfolio-thumb-img">
+                        <div class="portfolio-thumb-overlay">
+                            <span class="brand-btn px-5 py-2.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span data-i18n="watch_demo">Ver Demo</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full brand-gradient mb-3" data-i18n="p1_badge">Ahorra 1 hr/día</span>
                     <h3 class="text-xl font-bold text-white" data-i18n="p1_title">Desarrollo de App</h3>
-                    <p class="text-indigo-400 text-sm mb-2">n8n • OpenAI Vision</p>
+                    <p class="brand-text text-sm mb-2">n8n • OpenAI Vision</p>
                     <p class="text-slate-400 text-sm" data-i18n="p1_desc">Lectura automática de datos desde imágenes subidas y procesamiento inteligente.
                         <strong>Ahorro al cliente: 1 hr/día.</strong>
                     </p>
@@ -445,56 +978,86 @@
 
                 <!-- Project 2: Google Sheets Email Automation -->
                 <div class="group reveal reveal-delay-2">
-                    <div class="video-container bg-slate-800 shadow-2xl mb-6 border border-slate-700">
-                        <iframe src="https://www.loom.com/embed/24cc407878694598adc1ee7bb30bf68f" frameborder="0"
-                            webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    </div>
+                    <a href="demos.html#demo-2" target="_blank" rel="noopener" class="portfolio-thumb video-container shadow-2xl mb-6 block">
+                        <img src="https://cdn.loom.com/sessions/thumbnails/24cc407878694598adc1ee7bb30bf68f-with-play.gif" loading="lazy" alt="" class="portfolio-thumb-img">
+                        <div class="portfolio-thumb-overlay">
+                            <span class="brand-btn px-5 py-2.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span data-i18n="watch_demo">Ver Demo</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full brand-gradient mb-3" data-i18n="p2_badge">Cero pagos perdidos</span>
                     <h3 class="text-xl font-bold text-white" data-i18n="p2_title">Recordatorios de Pago Inteligentes</h3>
-                    <p class="text-indigo-400 text-sm mb-2">n8n • Google Sheets • Gmail</p>
+                    <p class="brand-text text-sm mb-2">n8n • Google Sheets • Gmail</p>
                     <p class="text-slate-400 text-sm" data-i18n="p2_desc">Consulta una hoja de cálculo para verificar quién debe pagar y envía un correo personalizado automáticamente.</p>
                 </div>
 
                 <!-- Project 3: WhatsApp AI Agent + CRM -->
                 <div class="group reveal reveal-delay-1">
-                    <div class="video-container bg-slate-800 shadow-2xl mb-6 border border-slate-700">
-                        <iframe src="https://www.loom.com/embed/cdd25ced23b64c07a1250949313a3b2a" frameborder="0"
-                            webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    </div>
+                    <a href="demos.html#demo-3" target="_blank" rel="noopener" class="portfolio-thumb video-container shadow-2xl mb-6 block">
+                        <img src="https://cdn.loom.com/sessions/thumbnails/cdd25ced23b64c07a1250949313a3b2a-with-play.gif" loading="lazy" alt="" class="portfolio-thumb-img">
+                        <div class="portfolio-thumb-overlay">
+                            <span class="brand-btn px-5 py-2.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span data-i18n="watch_demo">Ver Demo</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full brand-gradient mb-3" data-i18n="p3_badge">Captura de leads 24/7</span>
                     <h3 class="text-xl font-bold text-white" data-i18n="p3_title">Agente IA WhatsApp + CRM</h3>
-                    <p class="text-indigo-400 text-sm mb-2">n8n • WhatsApp • Google Sheets</p>
+                    <p class="brand-text text-sm mb-2">n8n • WhatsApp • Google Sheets</p>
                     <p class="text-slate-400 text-sm" data-i18n="p3_desc">Agente de IA para WhatsApp que maneja conversaciones y registra leads automáticamente en tu CRM.</p>
                 </div>
 
                 <!-- Project 4: Messenger Chatbot Bookings -->
                 <div class="group reveal reveal-delay-2">
-                    <div class="video-container bg-slate-800 shadow-2xl mb-6 border border-slate-700">
-                        <iframe src="https://www.loom.com/embed/c5922808d9bb449da041c25c3316b75c" frameborder="0"
-                            webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    </div>
+                    <a href="demos.html#demo-4" target="_blank" rel="noopener" class="portfolio-thumb video-container shadow-2xl mb-6 block">
+                        <img src="https://cdn.loom.com/sessions/thumbnails/c5922808d9bb449da041c25c3316b75c-with-play.gif" loading="lazy" alt="" class="portfolio-thumb-img">
+                        <div class="portfolio-thumb-overlay">
+                            <span class="brand-btn px-5 py-2.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span data-i18n="watch_demo">Ver Demo</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full brand-gradient mb-3" data-i18n="p4_badge">Reservas en piloto automático</span>
                     <h3 class="text-xl font-bold text-white" data-i18n="p4_title">Chatbot IA Messenger para Reservaciones</h3>
-                    <p class="text-indigo-400 text-sm mb-2">n8n • Facebook Messenger • AI</p>
+                    <p class="brand-text text-sm mb-2">n8n • Facebook Messenger • AI</p>
                     <p class="text-slate-400 text-sm" data-i18n="p4_desc">Chatbot de Messenger con IA que gestiona reservas de citas y rastrea leads automáticamente.</p>
                 </div>
 
                 <!-- Project 5: Email Attachments Downloader -->
                 <div class="group reveal reveal-delay-1">
-                    <div class="video-container bg-slate-800 shadow-2xl mb-6 border border-slate-700">
-                        <iframe src="https://www.loom.com/embed/829055b6a96547c1aa387eeb70954fa9" frameborder="0"
-                            webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    </div>
+                    <a href="demos.html#demo-5" target="_blank" rel="noopener" class="portfolio-thumb video-container shadow-2xl mb-6 block">
+                        <img src="https://cdn.loom.com/sessions/thumbnails/829055b6a96547c1aa387eeb70954fa9-with-play.gif" loading="lazy" alt="" class="portfolio-thumb-img">
+                        <div class="portfolio-thumb-overlay">
+                            <span class="brand-btn px-5 py-2.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span data-i18n="watch_demo">Ver Demo</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full brand-gradient mb-3" data-i18n="p5_badge">Bandeja → BD en segundos</span>
                     <h3 class="text-xl font-bold text-white" data-i18n="p5_title">Descargador de Adjuntos + Carga a BD</h3>
-                    <p class="text-indigo-400 text-sm mb-2">n8n • Gmail • Database</p>
+                    <p class="brand-text text-sm mb-2">n8n • Gmail • Database</p>
                     <p class="text-slate-400 text-sm" data-i18n="p5_desc">Descarga automática de adjuntos de correo y carga organizada a tu base de datos.</p>
                 </div>
 
                 <!-- Project 6: Email Extractor + CRM -->
                 <div class="group reveal reveal-delay-2">
-                    <div class="video-container bg-slate-800 shadow-2xl mb-6 border border-slate-700">
-                        <iframe src="https://www.loom.com/embed/fafc90f86c7242f3b1597501fa42886a" frameborder="0"
-                            webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-                    </div>
+                    <a href="demos.html#demo-6" target="_blank" rel="noopener" class="portfolio-thumb video-container shadow-2xl mb-6 block">
+                        <img src="https://cdn.loom.com/sessions/thumbnails/fafc90f86c7242f3b1597501fa42886a-with-play.gif" loading="lazy" alt="" class="portfolio-thumb-img">
+                        <div class="portfolio-thumb-overlay">
+                            <span class="brand-btn px-5 py-2.5 rounded-full text-sm font-bold inline-flex items-center gap-2">
+                                <i data-lucide="play" class="w-4 h-4"></i>
+                                <span data-i18n="watch_demo">Ver Demo</span>
+                            </span>
+                        </div>
+                    </a>
+                    <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full brand-gradient mb-3" data-i18n="p6_badge">Leads auto-clasificados</span>
                     <h3 class="text-xl font-bold text-white" data-i18n="p6_title">Extractor de Correos, Clasificador e Inserción a CRM</h3>
-                    <p class="text-indigo-400 text-sm mb-2">n8n • Gmail • AI • CRM</p>
+                    <p class="brand-text text-sm mb-2">n8n • Gmail • AI • CRM</p>
                     <p class="text-slate-400 text-sm" data-i18n="p6_desc">Extrae datos de correos, los clasifica con IA y los inserta automáticamente en tu CRM.</p>
                 </div>
 
@@ -502,27 +1065,39 @@
         </div>
     </section>
 
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
     <!-- CONTACT SECTION -->
     <section id="contact" class="py-20 bg-slate-950">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 reveal" data-i18n="contact_title">¿Listo para Automatizar tu Negocio?</h2>
-            <p class="text-slate-400 mb-10 max-w-xl mx-auto reveal" data-i18n="contact_subtitle">Agenda una auditoría gratuita de 30 minutos o escríbenos directamente por WhatsApp.</p>
-            <div class="flex flex-wrap justify-center gap-4 reveal">
-                <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
-                    class="bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white px-8 py-4 rounded-xl font-bold transition-all duration-200 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 flex items-center">
-                    <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
-                    <span data-i18n="contact_cta_calendar">Agendar Auditoría Gratis</span>
-                </a>
-                <a href="https://wa.me/50253638941?text=Vi%20su%20sitio%20web%20y%20necesito%20ayuda%20con%20automatización"
-                    target="_blank"
-                    class="border border-slate-700 bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-800 transition-all duration-200 flex items-center">
-                    <svg class="mr-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-                    </svg>
-                    <span data-i18n="contact_cta_whatsapp">Escríbenos por WhatsApp</span>
-                </a>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="contact-glow p-10 md:p-16 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 reveal" data-i18n="contact_title">¿Listo para Automatizar tu Negocio?</h2>
+                <p class="text-slate-400 mb-3 max-w-xl mx-auto reveal" data-i18n="contact_subtitle">Agenda una auditoría gratuita de 30 minutos o escríbenos directamente por WhatsApp.</p>
+                <p class="brand-text font-semibold text-sm mb-10 reveal" data-i18n="contact_urgency">Solo aceptamos 3 nuevos clientes por mes.</p>
+                <div class="flex flex-wrap justify-center gap-4 reveal">
+                    <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                        class="brand-btn px-8 py-4 rounded-xl font-bold flex items-center">
+                        <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                        <span data-i18n="contact_cta_calendar">Agendar Auditoría Gratis</span>
+                    </a>
+                    <a href="https://wa.me/50253638941?text=Vi%20su%20sitio%20web%20y%20necesito%20ayuda%20con%20automatización"
+                        target="_blank"
+                        class="border border-slate-700 bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-800 transition-all duration-200 flex items-center">
+                        <svg class="mr-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        <span data-i18n="contact_cta_whatsapp">Escríbenos por WhatsApp</span>
+                    </a>
+                </div>
+                <!-- Trust icons -->
+                <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm text-slate-500 reveal">
+                    <span data-i18n="contact_trust_1">&#128274; Sin compromiso</span>
+                    <span data-i18n="contact_trust_2">&#9889; Respuesta en 24h</span>
+                    <span data-i18n="contact_trust_3">&#127919; Enfocado en ROI</span>
+                </div>
             </div>
         </div>
     </section>
@@ -536,7 +1111,7 @@
     <div id="chat-widget" class="fixed bottom-6 right-6 z-50">
         <div id="chat-window"
             class="hidden bg-slate-900 border border-slate-700 w-80 h-96 rounded-2xl shadow-2xl flex flex-col mb-4 overflow-hidden">
-            <div class="bg-indigo-600 p-4 flex justify-between items-center">
+            <div class="brand-bg p-4 flex justify-between items-center">
                 <span class="font-bold text-white text-sm" data-i18n="chat_title">Asistente de Automatización</span>
                 <button onclick="toggleChat()" class="text-white hover:text-slate-200"><i data-lucide="x"
                         class="w-4 h-4"></i></button>
@@ -549,14 +1124,14 @@
             <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
                 <input type="text" id="user-input" data-i18n-placeholder="chat_placeholder"
                     placeholder="Escribe aquí..."
-                    class="w-full bg-slate-900 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none focus:border-indigo-500">
-                <button onclick="sendMessage()" class="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-500">
+                    class="w-full bg-slate-900 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                <button onclick="sendMessage()" class="brand-bg brand-bg-hover text-white p-2 rounded-md transition-colors">
                     <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
         <button onclick="toggleChat()"
-            class="bg-indigo-600 hover:bg-indigo-500 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all float-anim">
+            class="brand-bg brand-bg-hover text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all float-anim">
             <i data-lucide="message-square" class="w-7 h-7"></i>
         </button>
     </div>
@@ -567,8 +1142,10 @@
             es: {
                 // Nav
                 nav_services: "Servicios",
+                nav_demos: "Vélo en Acción",
                 nav_contact: "Contáctanos",
                 nav_cta: "Auditoría Gratis 30 Min",
+                watch_demo: "Ver Demo",
                 nav_ai_agents: "Agentes de IA",
                 nav_ai_agents_desc: "Chatbots y asistentes inteligentes",
                 nav_web_dev: "Desarrollo Web",
@@ -579,52 +1156,105 @@
                 nav_scraping_desc: "Extracción de datos automatizada",
                 nav_data_analysis: "Análisis de Datos (ETL & Dashboards)",
                 nav_data_analysis_desc: "Pipelines de datos y visualización",
+                nav_voice_agents: "Agentes de Voz con IA",
+                nav_voice_agents_desc: "IA telefónica entrante y saliente",
+                nav_leads: "Sistema de Generación de Leads",
+                nav_leads_desc: "Embudo automatizado completo",
+                nav_custom_software: "Software a la Medida",
+                nav_custom_software_desc: "Construido exactamente a tu medida",
 
                 // Hero
-                hero_badge: "Automatización Personalizada para PYMEs",
+                hero_badge: "Ahorra +10 Horas/Semana por Empleado",
                 hero_title_1: "Deja de Hacer ",
                 hero_title_2: "Trabajo Aburrido.",
-                hero_description: 'Construyo <strong>flujos de trabajo con n8n</strong> y <strong>Agentes de IA</strong> que manejan la extracción de datos, procesamiento de leads y tareas administrativas repetitivas para que tu equipo no tenga que hacerlo.',
+                hero_description: 'Tu equipo pierde horas en tareas que una herramienta de $10/mes podría resolver. Construimos las automatizaciones que los liberan — a ellos y a ti — para enfocarse en lo que realmente hace crecer tu negocio.',
                 hero_cta_demo: "Agendar Demo",
                 hero_cta_whatsapp: "Escríbenos por WhatsApp",
+                hero_social_proof: "Más de 10 empresas confían en nosotros",
 
                 // Tech
                 tech_title: "Impulsado por Tecnología Moderna",
+
+                // Pain Points
+                pain_title: "¿Te suena familiar?",
+                pain_subtitle: "Estos son los problemas que eliminamos para nuestros clientes.",
+                pain_before_label: "Antes",
+                pain_after_label: "Después",
+                pain_1_before: "Copiando datos manualmente entre hojas de cálculo todos los días",
+                pain_1_after: "Los datos fluyen automáticamente entre todas tus herramientas",
+                pain_2_before: "Perdiendo leads porque nadie respondió a tiempo",
+                pain_2_after: "Un agente de IA responde a cada lead en menos de 60 segundos, 24/7",
+                pain_3_before: "Tu equipo pasa horas en trabajo administrativo repetitivo",
+                pain_3_after: "Los flujos de trabajo corren en piloto automático. Tu equipo se enfoca en trabajo real",
+
+                // How It Works
+                how_title: "Así Funciona",
+                how_subtitle: "De la primera llamada a resultados reales en 3 pasos simples.",
+                how_step1_title: "Auditoría Gratis de 30 Min",
+                how_step1_desc: "Mapeamos tus mayores pérdidas de tiempo e identificamos las 2-3 automatizaciones con mayor retorno de inversión.",
+                how_step2_title: "Lo Construimos",
+                how_step2_desc: "En 1-2 semanas, tu flujo de trabajo personalizado está activo. No necesitas escribir código.",
+                how_step3_title: "Ahorras Tiempo",
+                how_step3_desc: "Tu equipo recupera horas cada semana mientras los leads y datos fluyen automáticamente.",
 
                 // Services
                 services_title: "Nuestros Servicios",
                 services_subtitle: "Soluciones tecnológicas integrales para impulsar tu negocio al siguiente nivel.",
                 svc_ai_title: "Agentes de IA",
                 svc_ai_desc: "Chatbots inteligentes y agentes conversacionales para WhatsApp, Messenger y tu sitio web que atienden clientes 24/7.",
+                svc_ai_result: "✦ Resultado: Responde al 100% de consultas, incluso a las 2am.",
                 svc_web_title: "Desarrollo Web",
                 svc_web_desc: "Sitios web modernos, rápidos y optimizados para SEO que convierten visitantes en clientes.",
+                svc_web_result: "✦ Resultado: Sitios que cargan en <2s y posicionan en Google.",
                 svc_app_title: "Desarrollo de Apps",
                 svc_app_desc: "Aplicaciones móviles y de escritorio a medida para optimizar los procesos de tu empresa.",
+                svc_app_result: "✦ Resultado: Reemplaza procesos manuales con flujos de un clic.",
                 svc_scraping_title: "Web Scraping & Automatización",
                 svc_scraping_desc: "Extracción automatizada de datos de cualquier sitio web. Monitoreo de precios, leads y competencia en piloto automático.",
+                svc_scraping_result: "✦ Resultado: Precios de competencia y leads diarios, automáticamente.",
                 svc_data_title: "Análisis de Datos (ETL & Dashboards)",
                 svc_data_desc: "Pipelines de datos, procesos ETL y dashboards interactivos para tomar decisiones basadas en datos reales.",
+                svc_data_result: "✦ Resultado: Conoce tus números sin abrir una hoja de cálculo.",
+                svc_voice_title: "Agentes de Voz con IA",
+                svc_voice_desc: "Agentes telefónicos con IA que atienden llamadas entrantes como recepcionistas Y realizan llamadas salientes para seguimiento de ventas, 24/7 sin tiempos de espera.",
+                svc_voice_result: "✦ Resultado: Nunca pierdas una llamada ni un lead por buzón de voz.",
+                svc_leads_title: "Sistema de Generación de Leads",
+                svc_leads_desc: "Un sistema de embudo completo que captura prospectos, los califica con IA y los nutre automáticamente hasta que estén listos para comprar, sin que tu equipo haga nada.",
+                svc_leads_result: "✦ Resultado: Un pipeline que se llena solo mientras duermes.",
+                svc_custom_title: "Software a la Medida",
+                svc_custom_desc: "Si se puede construir, lo construimos. Desde herramientas internas y portales de clientes hasta aplicaciones personalizadas con IA — dinos qué necesitas y lo hacemos realidad.",
+                svc_custom_result: "✦ Resultado: Software que se adapta a tu negocio, no al revés.",
 
                 // Portfolio
                 portfolio_title: "Mira la Automatización en Acción",
                 p1_title: "Desarrollo de App",
                 p1_desc: 'Lectura automática de datos desde imágenes subidas y procesamiento inteligente. <strong>Ahorro al cliente: 1 hr/día.</strong>',
+                p1_badge: "Ahorra 1 hr/día",
                 p2_title: "Recordatorios de Pago Inteligentes",
                 p2_desc: "Consulta una hoja de cálculo para verificar quién debe pagar y envía un correo personalizado automáticamente.",
+                p2_badge: "Cero pagos perdidos",
                 p3_title: "Agente IA WhatsApp + CRM",
                 p3_desc: "Agente de IA para WhatsApp que maneja conversaciones y registra leads automáticamente en tu CRM.",
+                p3_badge: "Captura de leads 24/7",
                 p4_title: "Chatbot IA Messenger para Reservaciones",
                 p4_desc: "Chatbot de Messenger con IA que gestiona reservas de citas y rastrea leads automáticamente.",
+                p4_badge: "Reservas en piloto automático",
                 p5_title: "Descargador de Adjuntos + Carga a BD",
                 p5_desc: "Descarga automática de adjuntos de correo y carga organizada a tu base de datos.",
+                p5_badge: "Bandeja → BD en segundos",
                 p6_title: "Extractor de Correos, Clasificador e Inserción a CRM",
                 p6_desc: "Extrae datos de correos, los clasifica con IA y los inserta automáticamente en tu CRM.",
+                p6_badge: "Leads auto-clasificados",
 
                 // Contact
                 contact_title: "¿Listo para Automatizar tu Negocio?",
                 contact_subtitle: "Agenda una auditoría gratuita de 30 minutos o escríbenos directamente por WhatsApp.",
+                contact_urgency: "Solo aceptamos 3 nuevos clientes por mes.",
                 contact_cta_calendar: "Agendar Auditoría Gratis",
                 contact_cta_whatsapp: "Escríbenos por WhatsApp",
+                contact_trust_1: "&#128274; Sin compromiso",
+                contact_trust_2: "&#9889; Respuesta en 24h",
+                contact_trust_3: "&#127919; Enfocado en ROI",
 
                 // Footer
                 footer_text: "© 2024 AutoMate. Construido con código, impulsado por IA.",
@@ -637,8 +1267,10 @@
             en: {
                 // Nav
                 nav_services: "Services",
+                nav_demos: "See It In Action",
                 nav_contact: "Contact Us",
                 nav_cta: "Free 30-Min Audit",
+                watch_demo: "Watch Demo",
                 nav_ai_agents: "AI Agents",
                 nav_ai_agents_desc: "Intelligent chatbots & assistants",
                 nav_web_dev: "Website Development",
@@ -649,52 +1281,105 @@
                 nav_scraping_desc: "Automated data extraction",
                 nav_data_analysis: "Data Analysis Service (ETL & Dashboards)",
                 nav_data_analysis_desc: "Data pipelines & visualization",
+                nav_voice_agents: "Voice AI Agents",
+                nav_voice_agents_desc: "Inbound & outbound phone AI",
+                nav_leads: "Lead Generation System",
+                nav_leads_desc: "Full-funnel automated pipeline",
+                nav_custom_software: "Custom Software",
+                nav_custom_software_desc: "Built exactly to your specs",
 
                 // Hero
-                hero_badge: "Custom Automation for SMEs",
+                hero_badge: "Save 10+ Hours Per Week Per Employee",
                 hero_title_1: "Stop Doing ",
                 hero_title_2: "Boring Work.",
-                hero_description: 'I build <strong>n8n workflows</strong> and <strong>AI Agents</strong> that handle data extraction, lead processing, and repetitive admin tasks so your team doesn\'t have to.',
+                hero_description: 'Your team is stuck doing work a $10/month tool could handle. We build the automations that free them — and you — to focus on what actually grows your business.',
                 hero_cta_demo: "Book a Demo",
                 hero_cta_whatsapp: "WhatsApp Us",
+                hero_social_proof: "Trusted by 10+ businesses",
 
                 // Tech
                 tech_title: "Powered by Modern Tech",
+
+                // Pain Points
+                pain_title: "Sound familiar?",
+                pain_subtitle: "These are the problems we eliminate for our clients.",
+                pain_before_label: "Before",
+                pain_after_label: "After",
+                pain_1_before: "Manually copying data between spreadsheets every day",
+                pain_1_after: "Data flows automatically between all your tools",
+                pain_2_before: "Missing leads because nobody replied fast enough",
+                pain_2_after: "AI agent responds to every lead in under 60 seconds, 24/7",
+                pain_3_before: "Your team spends hours on repetitive admin work",
+                pain_3_after: "Workflows run on autopilot. Your team focuses on real work",
+
+                // How It Works
+                how_title: "How It Works",
+                how_subtitle: "From first call to real results in 3 simple steps.",
+                how_step1_title: "Free 30-Min Audit",
+                how_step1_desc: "We map your biggest time-wasters and identify the 2-3 automations with the highest ROI.",
+                how_step2_title: "We Build It",
+                how_step2_desc: "In 1–2 weeks, your custom workflow is live. No code needed from your side.",
+                how_step3_title: "You Save Time",
+                how_step3_desc: "Watch your team reclaim hours every week while leads and data flow automatically.",
 
                 // Services
                 services_title: "Our Services",
                 services_subtitle: "Comprehensive tech solutions to take your business to the next level.",
                 svc_ai_title: "AI Agents",
                 svc_ai_desc: "Intelligent chatbots and conversational agents for WhatsApp, Messenger, and your website that serve customers 24/7.",
+                svc_ai_result: "✦ Result: Respond to 100% of inquiries, even at 2am.",
                 svc_web_title: "Website Development",
                 svc_web_desc: "Modern, fast, SEO-optimized websites that convert visitors into customers.",
+                svc_web_result: "✦ Result: Sites that load in <2s and rank on Google.",
                 svc_app_title: "App Building",
                 svc_app_desc: "Custom mobile and desktop applications to optimize your business processes.",
+                svc_app_result: "✦ Result: Replace manual processes with one-click workflows.",
                 svc_scraping_title: "Web Scraping Automation",
                 svc_scraping_desc: "Automated data extraction from any website. Price monitoring, leads, and competitor tracking on autopilot.",
+                svc_scraping_result: "✦ Result: Get competitor pricing & leads daily, automatically.",
                 svc_data_title: "Data Analysis Service (ETL & Dashboards)",
                 svc_data_desc: "Data pipelines, ETL processes, and interactive dashboards for data-driven decision making.",
+                svc_data_result: "✦ Result: Know your numbers without opening a spreadsheet.",
+                svc_voice_title: "Voice AI Agents",
+                svc_voice_desc: "AI-powered phone agents that handle inbound calls like a receptionist AND make outbound calls for sales follow-ups — 24/7, with no hold times.",
+                svc_voice_result: "✦ Result: Never miss a call. Never lose a lead to voicemail.",
+                svc_leads_title: "Lead Generation System",
+                svc_leads_desc: "A full-funnel system that captures prospects, qualifies them with AI, and nurtures them automatically until they're ready to buy — without your team lifting a finger.",
+                svc_leads_result: "✦ Result: A pipeline that fills itself while you sleep.",
+                svc_custom_title: "Custom Software",
+                svc_custom_desc: "If it can be built, we build it. From internal tools and client portals to fully custom AI-powered applications — spec it out and we make it real.",
+                svc_custom_result: "✦ Result: Software that fits your business exactly, not the other way around.",
 
                 // Portfolio
                 portfolio_title: "See The Automation In Action",
                 p1_title: "App Development",
                 p1_desc: 'Automatically reading data from uploaded images and processing it. <strong>Saved Client: 1 hr/day.</strong>',
+                p1_badge: "Saves 1 hr/day",
                 p2_title: "Smart Payment Reminders",
                 p2_desc: "Consults a spreadsheet to check who is due for payment and sends a customized, personalized email automatically.",
+                p2_badge: "Zero missed payments",
                 p3_title: "AI Agent WhatsApp + CRM Recorder",
                 p3_desc: "Intelligent WhatsApp AI agent that handles conversations and automatically logs leads to your CRM spreadsheet.",
+                p3_badge: "24/7 lead capture",
                 p4_title: "Messenger AI Chatbot Bookings",
                 p4_desc: "AI-powered Messenger chatbot that handles appointment bookings and tracks leads automatically.",
+                p4_badge: "Bookings on autopilot",
                 p5_title: "Email Attachments Downloader + DB Uploader",
                 p5_desc: "Automatically downloads email attachments and uploads them to your database for organized storage.",
+                p5_badge: "Inbox → DB in seconds",
                 p6_title: "Email Extractor, Classifier & CRM Inserter",
                 p6_desc: "Extracts data from emails, classifies them using AI, and automatically inserts leads into your CRM.",
+                p6_badge: "Leads auto-sorted & filed",
 
                 // Contact
                 contact_title: "Ready to Automate Your Business?",
                 contact_subtitle: "Book a free 30-minute audit or reach us directly via WhatsApp.",
+                contact_urgency: "We only take on 3 new clients per month.",
                 contact_cta_calendar: "Book Free Audit",
                 contact_cta_whatsapp: "WhatsApp Us",
+                contact_trust_1: "&#128274; No commitment",
+                contact_trust_2: "&#9889; Response in 24h",
+                contact_trust_3: "&#127919; ROI-focused",
 
                 // Footer
                 footer_text: "© 2024 AutoMate. Built with code, powered by AI.",
@@ -830,7 +1515,7 @@
             const div = document.createElement('div');
             div.id = Math.random().toString(36).substring(7);
             div.className = sender === 'user'
-                ? 'bg-indigo-600 text-white p-3 rounded-lg rounded-tr-none self-end max-w-[85%] ml-auto'
+                ? 'brand-bg text-white p-3 rounded-lg rounded-tr-none self-end max-w-[85%] ml-auto'
                 : 'bg-slate-800 text-slate-200 p-3 rounded-lg rounded-tl-none self-start max-w-[85%]';
             div.innerHTML = text;
             messagesContainer.appendChild(div);
