@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoMate | Agencia de Automatización con IA</title>
+    <meta name="description" content="Automatización inteligente con n8n e IA. Agentes de IA, Desarrollo Web, Apps, Web Scraping y Análisis de Datos para tu empresa.">
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ============================================
+           BRAND PALETTE — EDIT ONLY THIS SECTION
+           TO CHANGE THE ENTIRE SITE'S COLOR SCHEME.
+           Copy these same variables to demos.html too.
+           ============================================ */
+
+        /* ACTIVE PALETTE — Palette A (Indigo / Cyan) */
+        :root {
+            --color-primary:       #6366f1;   /* main brand — buttons, highlights */
+            --color-primary-dark:  #4f46e5;   /* hover states */
+            --color-secondary:     #06b6d4;   /* accent — result lines, dividers */
+            --color-accent:        #8b5cf6;   /* third accent — custom software */
+            --color-success:       #10b981;   /* positive states, after-cards */
+            --color-danger:        #f43f5e;   /* negative/urgent — voice AI, before-cards */
+            --color-bg:            #0f0f1a;   /* page background */
+            --color-surface:       #1a1a2e;   /* card backgrounds */
+            --color-border:        #2a2a4a;   /* card borders */
+            --color-text:          #e2e8f0;   /* body text */
+            --color-text-muted:    #94a3b8;   /* secondary text */
+
+            /* RGB triplets for rgba() composition */
+            --color-primary-rgb:   99, 102, 241;
+            --color-secondary-rgb: 6, 182, 212;
+            --color-accent-rgb:    139, 92, 246;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+
+        /* ============================================
+           PALETTE B — Amber / Emerald (A/B test option)
+           To activate: comment out Palette A above,
+           uncomment this block, save, and redeploy.
+           ============================================
+        :root {
+            --color-primary:       #f59e0b;
+            --color-primary-dark:  #d97706;
+            --color-secondary:     #10b981;
+            --color-accent:        #ef4444;
+            --color-success:       #10b981;
+            --color-danger:        #f43f5e;
+            --color-bg:            #0f0f0f;
+            --color-surface:       #1a1a1a;
+            --color-border:        #2a2a2a;
+            --color-text:          #f1f5f9;
+            --color-text-muted:    #94a3b8;
+            --color-primary-rgb:   245, 158, 11;
+            --color-secondary-rgb: 16, 185, 129;
+            --color-accent-rgb:    239, 68, 68;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+        */
+
+        /* ============================================
+           PALETTE C — Slate / Rose (A/B test option)
+           To activate: comment out active palette,
+           uncomment this block, save, and redeploy.
+           ============================================
+        :root {
+            --color-primary:       #e11d48;
+            --color-primary-dark:  #be123c;
+            --color-secondary:     #38bdf8;
+            --color-accent:        #a78bfa;
+            --color-success:       #10b981;
+            --color-danger:        #f43f5e;
+            --color-bg:            #0f1117;
+            --color-surface:       #1e2130;
+            --color-border:        #2e3347;
+            --color-text:          #f1f5f9;
+            --color-text-muted:    #94a3b8;
+            --color-primary-rgb:   225, 29, 72;
+            --color-secondary-rgb: 56, 189, 248;
+            --color-accent-rgb:    167, 139, 250;
+            --color-success-rgb:   16, 185, 129;
+            --color-danger-rgb:    244, 63, 94;
+        }
+        */
+
+        /* ===== BRAND UTILITY CLASSES =====
+           Use these instead of Tailwind brand-color utilities. */
+        .brand-text { color: var(--color-primary); }
+        .brand-text-secondary { color: var(--color-secondary); }
+        .brand-text-accent { color: var(--color-accent); }
+        .brand-bg { background-color: var(--color-primary); }
+        .brand-bg-dark { background-color: var(--color-primary-dark); }
+        .brand-bg-tint { background-color: rgba(var(--color-primary-rgb), 0.15); }
+        .brand-bg-tint-soft { background-color: rgba(var(--color-primary-rgb), 0.10); }
+        .brand-border { border-color: var(--color-primary); }
+        .brand-border-soft { border-color: rgba(var(--color-primary-rgb), 0.30); }
+
+        .brand-gradient {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        }
+        .brand-gradient-primary {
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+        }
+        .brand-gradient-secondary {
+            background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary));
+        }
+        .brand-gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand-shadow {
+            box-shadow: 0 10px 15px -3px rgba(var(--color-primary-rgb), 0.25), 0 4px 6px -4px rgba(var(--color-primary-rgb), 0.25);
+        }
+        .brand-shadow-strong {
+            box-shadow: 0 20px 25px -5px rgba(var(--color-primary-rgb), 0.40), 0 8px 10px -6px rgba(var(--color-primary-rgb), 0.40);
+        }
+        .brand-shadow-secondary {
+            box-shadow: 0 10px 15px -3px rgba(var(--color-secondary-rgb), 0.30), 0 4px 6px -4px rgba(var(--color-secondary-rgb), 0.30);
+        }
+
+        .brand-btn {
+            background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+            color: white;
+            transition: all 0.2s ease;
+            box-shadow: 0 10px 15px -3px rgba(var(--color-primary-rgb), 0.25);
+        }
+        .brand-btn:hover {
+            background: linear-gradient(135deg, var(--color-primary), #818cf8);
+            box-shadow: 0 20px 25px -5px rgba(var(--color-primary-rgb), 0.40);
+        }
+
+        /* Service-card border hover variants */
+        .svc-hover-primary:hover   { border-color: rgba(var(--color-primary-rgb), 0.40) !important; }
+        .svc-hover-secondary:hover { border-color: rgba(var(--color-secondary-rgb), 0.40) !important; }
+        .svc-hover-accent:hover    { border-color: rgba(var(--color-accent-rgb), 0.40) !important; }
+        .svc-hover-danger:hover    { border-color: rgba(var(--color-danger-rgb), 0.40) !important; }
+        .svc-hover-success:hover   { border-color: rgba(var(--color-success-rgb), 0.40) !important; }
+
+        /* Hover variants for brand utility classes */
+        .brand-bg-hover:hover { background-color: var(--color-primary-dark); }
+        .brand-border-focus:focus { border-color: var(--color-primary); }
+
+        /* Semantic state colors */
+        .state-danger-text { color: var(--color-danger); }
+        .state-success-text { color: var(--color-success); }
+        .state-danger-bg-tint { background-color: rgba(var(--color-danger-rgb), 0.05); }
+        .state-success-bg-tint { background-color: rgba(var(--color-success-rgb), 0.05); }
+        .state-danger-border-tint { border-color: rgba(var(--color-danger-rgb), 0.10); }
+
+        /* ===== ANIMATED GRID BACKGROUND ===== */
+        .hero-grid-bg {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-grid-bg::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background-image:
+                linear-gradient(rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(var(--color-primary-rgb), 0.08) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse 8s ease-in-out infinite;
+        }
+
+        .hero-grid-bg::after {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background-image:
+                linear-gradient(rgba(var(--color-secondary-rgb), 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(var(--color-secondary-rgb), 0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridPulse2 12s ease-in-out infinite;
+            transform: translate(30px, 30px);
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.4; transform: scale(1) translate(0, 0); }
+            50% { opacity: 1; transform: scale(1.02) translate(-5px, -5px); }
+        }
+
+        @keyframes gridPulse2 {
+            0%, 100% { opacity: 0.3; transform: scale(1) translate(30px, 30px); }
+            50% { opacity: 0.8; transform: scale(1.03) translate(25px, 25px); }
+        }
+
+        /* ===== GLOWING ORBS ===== */
+        .orb-indigo {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(var(--color-primary-rgb), 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .orb-cyan {
+            position: absolute;
+            bottom: -15%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(var(--color-secondary-rgb), 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== SECTION DIVIDER ===== */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.4), rgba(var(--color-secondary-rgb), 0.4), transparent);
+        }
+
+        /* ===== SERVICE CARD GLOW ===== */
+        .service-card:hover {
+            box-shadow: 0 0 24px rgba(var(--color-primary-rgb), 0.2);
+        }
+
+        /* ===== HOW IT WORKS TIMELINE =====
+           top: 32px = vertical center of the 64px (w-16 h-16) step circles. */
+        .timeline-connector {
+            position: absolute;
+            top: 32px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            border-top: 2px dashed rgba(var(--color-primary-rgb), 0.3);
+            z-index: 0;
+        }
+
+        /* ===== CONTACT GLOW CARD ===== */
+        .contact-glow {
+            position: relative;
+            border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.05), rgba(var(--color-secondary-rgb), 0.03));
+        }
+
+        .contact-glow::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 1.5rem;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.4), rgba(var(--color-secondary-rgb), 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* ===== EXISTING ANIMATIONS ===== */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            border-radius: 0.75rem;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        .reveal-delay-6 { transition-delay: 0.6s; }
+
+        /* Dropdown styles */
+        .nav-dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(8px);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+        }
+
+        .nav-dropdown.show,
+        .nav-item:hover .nav-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown-item {
+            transition: background-color 0.15s ease, padding-left 0.15s ease;
+        }
+
+        .nav-dropdown-item:hover {
+            padding-left: 1.25rem;
+            background-color: rgba(var(--color-primary-rgb), 0.15);
+        }
+
+        /* Language toggle */
+        .lang-toggle {
+            position: relative;
+            display: inline-flex;
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .lang-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+        }
+
+        .lang-btn:not(.active) {
+            background: rgba(51, 65, 85, 0.5);
+            color: #94a3b8;
+        }
+
+        .lang-btn:not(.active):hover {
+            color: #e2e8f0;
+            background: rgba(51, 65, 85, 0.8);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .mobile-menu.open {
+            max-height: 600px;
+            opacity: 1;
+        }
+
+        .mobile-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .mobile-submenu.open {
+            max-height: 400px;
+        }
+
+        /* Subtle glow on nav */
+        nav::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(var(--color-primary-rgb), 0.3), transparent);
+        }
+
+        /* ===== SOCIAL PROOF AVATARS ===== */
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            border: 2px solid rgba(15, 23, 42, 0.8);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-200 font-sans antialiased">
+
+    <!-- NAVIGATION -->
+    <nav id="main-nav" class="fixed w-full z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center flex-shrink-0">
+                    <a href="#" class="text-xl font-bold text-white tracking-tighter">
+                        <span class="brand-text">Auto</span>Mate
+                    </a>
+                </div>
+
+                <!-- Desktop Menu (right-aligned) -->
+                <div class="hidden md:flex items-center gap-1">
+                    <!-- Services Dropdown -->
+                    <div class="nav-item relative">
+                        <button id="services-btn" class="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
+                            <span data-i18n="nav_services">Servicios</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200"></i>
+                        </button>
+                        <div class="nav-dropdown absolute right-0 top-full mt-2 w-72 bg-slate-900/95 backdrop-blur-xl border border-slate-700/60 rounded-xl shadow-2xl shadow-black/40 py-2 z-50">
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg brand-bg-tint flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bot" class="w-4 h-4 brand-text"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_ai_agents">Agentes de IA</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_ai_agents_desc">Chatbots y asistentes inteligentes</span>
+                                </div>
+                            </a>
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-secondary-rgb), 0.15);">
+                                    <i data-lucide="globe" class="w-4 h-4 brand-text-secondary"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_web_dev">Desarrollo Web</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_web_dev_desc">Sitios web modernos y rápidos</span>
+                                </div>
+                            </a>
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                                    <i data-lucide="smartphone" class="w-4 h-4 brand-text-accent"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_app_building">Desarrollo de Apps</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_app_building_desc">Aplicaciones móviles y de escritorio</span>
+                                </div>
+                            </a>
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="scan-search" class="w-4 h-4 text-emerald-400"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_scraping">Web Scraping & Automatización</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_scraping_desc">Extracción de datos automatizada</span>
+                                </div>
+                            </a>
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="bar-chart-3" class="w-4 h-4 text-amber-400"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_data_analysis">Análisis de Datos (ETL & Dashboards)</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_data_analysis_desc">Pipelines de datos y visualización</span>
+                                </div>
+                            </a>
+                            <!-- NEW: Voice AI Agents -->
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-danger-rgb), 0.15);">
+                                    <i data-lucide="phone-call" class="w-4 h-4 state-danger-text"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_voice_agents">Agentes de Voz con IA</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_voice_agents_desc">IA telefónica entrante y saliente</span>
+                                </div>
+                            </a>
+                            <!-- NEW: Lead Generation System -->
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-success-rgb), 0.15);">
+                                    <i data-lucide="target" class="w-4 h-4 state-success-text"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_leads">Sistema de Generación de Leads</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_leads_desc">Embudo automatizado completo</span>
+                                </div>
+                            </a>
+                            <!-- NEW: Custom Software -->
+                            <a href="#services" class="nav-dropdown-item flex items-center gap-3 px-4 py-3 text-sm text-slate-300 hover:text-white">
+                                <span class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                                    <i data-lucide="code-2" class="w-4 h-4 brand-text-accent"></i>
+                                </span>
+                                <div>
+                                    <span class="font-semibold block" data-i18n="nav_custom_software">Software a la Medida</span>
+                                    <span class="text-xs text-slate-500" data-i18n="nav_custom_software_desc">Construido exactamente a tu medida</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- See It In Action (Demos) -->
+                    <a href="demos.html" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
+                        <span data-i18n="nav_demos">Vélo en Acción</span>
+                    </a>
+
+                    <!-- Contact Us -->
+                    <a href="#contact" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition-all duration-200">
+                        <span data-i18n="nav_contact">Contáctanos</span>
+                    </a>
+
+                    <!-- Divider -->
+                    <div class="w-px h-6 bg-slate-700/60 mx-2"></div>
+
+                    <!-- Language Toggle -->
+                    <div class="lang-toggle border border-slate-700/50">
+                        <button class="lang-btn active" data-lang="es" onclick="switchLang('es')">ES</button>
+                        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="w-px h-6 bg-slate-700/60 mx-2"></div>
+
+                    <!-- CTA Button -->
+                    <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                        class="brand-btn px-5 py-2 rounded-full text-sm font-bold">
+                        <span data-i18n="nav_cta">Auditoría Gratis 30 Min</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-3">
+                    <div class="lang-toggle border border-slate-700/50">
+                        <button class="lang-btn active" data-lang="es" onclick="switchLang('es')">ES</button>
+                        <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    </div>
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white p-2 rounded-lg hover:bg-slate-800/60 transition">
+                        <i data-lucide="menu" class="w-6 h-6" id="mobile-menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden bg-slate-900/95 backdrop-blur-xl border-t border-slate-800">
+            <div class="px-4 py-4 space-y-1">
+                <!-- Mobile Services -->
+                <button onclick="toggleMobileSubmenu()" class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
+                    <span data-i18n="nav_services">Servicios</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-200" id="mobile-submenu-icon"></i>
+                </button>
+                <div id="mobile-submenu" class="mobile-submenu pl-4 space-y-1">
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="bot" class="w-4 h-4 brand-text"></i>
+                        <span data-i18n="nav_ai_agents">Agentes de IA</span>
+                    </a>
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="globe" class="w-4 h-4 brand-text-secondary"></i>
+                        <span data-i18n="nav_web_dev">Desarrollo Web</span>
+                    </a>
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="smartphone" class="w-4 h-4 brand-text-accent"></i>
+                        <span data-i18n="nav_app_building">Desarrollo de Apps</span>
+                    </a>
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="scan-search" class="w-4 h-4 text-emerald-400"></i>
+                        <span data-i18n="nav_scraping">Web Scraping & Automatización</span>
+                    </a>
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-amber-400"></i>
+                        <span data-i18n="nav_data_analysis">Análisis de Datos (ETL & Dashboards)</span>
+                    </a>
+                    <!-- NEW: Voice AI Agents -->
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="phone-call" class="w-4 h-4 state-danger-text"></i>
+                        <span data-i18n="nav_voice_agents">Agentes de Voz con IA</span>
+                    </a>
+                    <!-- NEW: Lead Generation -->
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="target" class="w-4 h-4 state-success-text"></i>
+                        <span data-i18n="nav_leads">Sistema de Generación de Leads</span>
+                    </a>
+                    <!-- NEW: Custom Software -->
+                    <a href="#services" onclick="closeMobileMenu()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-400 hover:text-white rounded-lg hover:bg-slate-800/40 transition">
+                        <i data-lucide="code-2" class="w-4 h-4 brand-text-accent"></i>
+                        <span data-i18n="nav_custom_software">Software a la Medida</span>
+                    </a>
+                </div>
+
+                <!-- Mobile See It In Action -->
+                <a href="demos.html" class="block px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
+                    <span data-i18n="nav_demos">Vélo en Acción</span>
+                </a>
+
+                <!-- Mobile Contact -->
+                <a href="#contact" onclick="closeMobileMenu()" class="block px-4 py-3 text-sm font-medium text-slate-300 hover:text-white rounded-lg hover:bg-slate-800/60 transition">
+                    <span data-i18n="nav_contact">Contáctanos</span>
+                </a>
+
+                <!-- Mobile CTA -->
+                <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                    class="brand-btn block text-center px-5 py-3 rounded-xl text-sm font-bold mt-3">
+                    <span data-i18n="nav_cta">Auditoría Gratis 30 Min</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
+        <!-- Animated grid background -->
+        <div class="hero-grid-bg"></div>
+        <!-- Glowing orbs -->
+        <div class="orb-indigo"></div>
+        <div class="orb-cyan"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div
+                class="inline-flex items-center px-4 py-2 rounded-full brand-border-soft brand-bg-tint-soft brand-text text-sm font-medium mb-8 border">
+                <i data-lucide="zap" class="w-4 h-4 mr-2"></i>
+                <span data-i18n="hero_badge">Ahorra +10 Horas/Semana por Empleado</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8">
+                <span data-i18n="hero_title_1">Deja de Hacer </span><span
+                    class="brand-gradient-text" data-i18n="hero_title_2">Trabajo Aburrido.</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400" data-i18n="hero_description">
+                Tu equipo pierde horas en tareas que una herramienta de $10/mes podría resolver. Construimos las automatizaciones que los liberan — a ellos y a ti — para enfocarse en lo que realmente hace crecer tu negocio.
+            </p>
+            <div class="mt-10 flex flex-wrap justify-center gap-4">
+                <!-- GOOGLE CALENDAR LINK -->
+                <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                    class="bg-white text-slate-900 px-8 py-4 rounded-lg font-bold hover:bg-slate-200 transition flex items-center">
+                    <span data-i18n="hero_cta_demo">Agendar Demo</span> <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                </a>
+                <!-- WHATSAPP LINK -->
+                <a href="https://wa.me/50244647474?text=Vi%20su%20sitio%20web%20y%20necesito%20ayuda%20con%20automatización"
+                    target="_blank"
+                    class="border border-slate-700 bg-slate-900 text-white px-8 py-4 rounded-lg font-bold hover:bg-slate-800 transition flex items-center">
+                    <svg class="mr-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span data-i18n="hero_cta_whatsapp">Escríbenos por WhatsApp</span>
+                </a>
+            </div>
+
+            <!-- SOCIAL PROOF BAR -->
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-slate-400">
+                <!-- Stars -->
+                <div class="flex items-center gap-1">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </div>
+                <!-- Text -->
+                <span data-i18n="hero_social_proof">Más de 10 empresas confían en nosotros</span>
+                <!-- Avatars -->
+                <div class="flex items-center -space-x-2">
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, var(--color-primary), var(--color-accent));">JM</div>
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, var(--color-secondary), #22d3ee);">SR</div>
+                    <div class="avatar-circle" style="background: linear-gradient(135deg, #10b981, #34d399);">AK</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- TECH STACK -->
+    <section class="py-10 border-y border-slate-800 bg-slate-900/50 reveal">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-sm text-slate-500 mb-6 font-semibold uppercase tracking-wider" data-i18n="tech_title">Impulsado por Tecnología Moderna</p>
+            <div
+                class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition duration-500">
+                <span class="text-xl font-bold text-white flex items-center"><i data-lucide="workflow" class="mr-2"></i>
+                    n8n</span>
+                <span class="text-xl font-bold text-white flex items-center"><i data-lucide="database" class="mr-2"></i>
+                    Supabase</span>
+                <span class="text-xl font-bold text-white flex items-center"><i data-lucide="bot" class="mr-2"></i>
+                    OpenAI</span>
+                <span class="text-xl font-bold text-white flex items-center"><i data-lucide="layout" class="mr-2"></i>
+                    Antigravity</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- PAIN POINTS / BEFORE-AFTER SECTION -->
+    <section id="pain-points" class="py-20 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center reveal" data-i18n="pain_title">¿Te suena familiar?</h2>
+            <p class="text-slate-400 text-center mb-16 max-w-2xl mx-auto reveal" data-i18n="pain_subtitle">Estos son los problemas que eliminamos para nuestros clientes.</p>
+            <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+                <!-- Card 1 -->
+                <div class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden reveal reveal-delay-1 flex flex-col h-full">
+                    <div class="p-5 state-danger-bg-tint state-danger-border-tint border-b flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-danger-text text-lg">&#10060;</span>
+                            <span class="text-sm font-bold state-danger-text uppercase tracking-wider" data-i18n="pain_before_label">Antes</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_1_before">Copiando datos manualmente entre hojas de cálculo todos los días</p>
+                    </div>
+                    <div class="p-5 state-success-bg-tint flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-success-text text-lg">&#9989;</span>
+                            <span class="text-sm font-bold state-success-text uppercase tracking-wider" data-i18n="pain_after_label">Después</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_1_after">Los datos fluyen automáticamente entre todas tus herramientas</p>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden reveal reveal-delay-2 flex flex-col h-full">
+                    <div class="p-5 state-danger-bg-tint state-danger-border-tint border-b flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-danger-text text-lg">&#10060;</span>
+                            <span class="text-sm font-bold state-danger-text uppercase tracking-wider" data-i18n="pain_before_label">Antes</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_2_before">Perdiendo leads porque nadie respondió a tiempo</p>
+                    </div>
+                    <div class="p-5 state-success-bg-tint flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-success-text text-lg">&#9989;</span>
+                            <span class="text-sm font-bold state-success-text uppercase tracking-wider" data-i18n="pain_after_label">Después</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_2_after">Un agente de IA responde a cada lead en menos de 60 segundos, 24/7</p>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="rounded-2xl border border-slate-800 bg-slate-900/40 overflow-hidden reveal reveal-delay-3 flex flex-col h-full">
+                    <div class="p-5 state-danger-bg-tint state-danger-border-tint border-b flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-danger-text text-lg">&#10060;</span>
+                            <span class="text-sm font-bold state-danger-text uppercase tracking-wider" data-i18n="pain_before_label">Antes</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_3_before">Tu equipo pasa horas en trabajo administrativo repetitivo</p>
+                    </div>
+                    <div class="p-5 state-success-bg-tint flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="state-success-text text-lg">&#9989;</span>
+                            <span class="text-sm font-bold state-success-text uppercase tracking-wider" data-i18n="pain_after_label">Después</span>
+                        </div>
+                        <p class="text-sm text-slate-300" data-i18n="pain_3_after">Los flujos de trabajo corren en piloto automático. Tu equipo se enfoca en trabajo real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="how-it-works" class="py-20 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center reveal" data-i18n="how_title">Así Funciona</h2>
+            <p class="text-slate-400 text-center mb-16 max-w-2xl mx-auto reveal" data-i18n="how_subtitle">De la primera llamada a resultados reales en 3 pasos simples.</p>
+            <div class="relative">
+                <!-- Dashed connector line (desktop only) -->
+                <div class="hidden lg:block timeline-connector" style="left: 16.67%; right: 16.67%;"></div>
+                <div class="grid sm:grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="text-center reveal reveal-delay-1">
+                        <div class="w-16 h-16 rounded-full brand-gradient-primary brand-shadow flex items-center justify-center mx-auto mb-6 text-white text-2xl font-extrabold">1</div>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="how_step1_title">Auditoría Gratis de 30 Min</h3>
+                        <p class="text-sm text-slate-400" data-i18n="how_step1_desc">Mapeamos tus mayores pérdidas de tiempo e identificamos las 2-3 automatizaciones con mayor retorno de inversión.</p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="text-center reveal reveal-delay-2">
+                        <div class="w-16 h-16 rounded-full brand-gradient brand-shadow flex items-center justify-center mx-auto mb-6 text-white text-2xl font-extrabold">2</div>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="how_step2_title">Lo Construimos</h3>
+                        <p class="text-sm text-slate-400" data-i18n="how_step2_desc">En 1-2 semanas, tu flujo de trabajo personalizado está activo. No necesitas escribir código.</p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="text-center reveal reveal-delay-3">
+                        <div class="w-16 h-16 rounded-full brand-shadow-secondary flex items-center justify-center mx-auto mb-6 text-white text-2xl font-extrabold" style="background: linear-gradient(135deg, var(--color-secondary), #67e8f9);">3</div>
+                        <h3 class="text-lg font-bold text-white mb-3" data-i18n="how_step3_title">Ahorras Tiempo</h3>
+                        <p class="text-sm text-slate-400" data-i18n="how_step3_desc">Tu equipo recupera horas cada semana mientras los leads y datos fluyen automáticamente.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-20 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 text-center reveal" data-i18n="services_title">Nuestros Servicios</h2>
+            <p class="text-slate-400 text-center mb-16 max-w-2xl mx-auto reveal" data-i18n="services_subtitle">Soluciones tecnológicas integrales para impulsar tu negocio al siguiente nivel.</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service 1: AI Agents -->
+                <div class="service-card svc-hover-primary group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-1">
+                    <div class="w-12 h-12 rounded-xl brand-bg-tint flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bot" class="w-6 h-6 brand-text"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_ai_title">Agentes de IA</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_ai_desc">Chatbots inteligentes y agentes conversacionales para WhatsApp, Messenger y tu sitio web que atienden clientes 24/7.</p>
+                    <p class="text-sm brand-text mt-3 font-medium" data-i18n="svc_ai_result">✦ Resultado: Responde al 100% de consultas, incluso a las 2am.</p>
+                </div>
+                <!-- Service 2: Web Dev -->
+                <div class="service-card svc-hover-secondary group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-2">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-secondary-rgb), 0.15);">
+                        <i data-lucide="globe" class="w-6 h-6 brand-text-secondary"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_web_title">Desarrollo Web</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_web_desc">Sitios web modernos, rápidos y optimizados para SEO que convierten visitantes en clientes.</p>
+                    <p class="text-sm brand-text-secondary mt-3 font-medium" data-i18n="svc_web_result">✦ Resultado: Sitios que cargan en &lt;2s y posicionan en Google.</p>
+                </div>
+                <!-- Service 3: App Building -->
+                <div class="service-card svc-hover-accent group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-3">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                        <i data-lucide="smartphone" class="w-6 h-6 brand-text-accent"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_app_title">Desarrollo de Apps</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_app_desc">Aplicaciones móviles y de escritorio a medida para optimizar los procesos de tu empresa.</p>
+                    <p class="text-sm brand-text-accent mt-3 font-medium" data-i18n="svc_app_result">✦ Resultado: Reemplaza procesos manuales con flujos de un clic.</p>
+                </div>
+                <!-- Service 4: Web Scraping -->
+                <div class="service-card group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-emerald-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                        <i data-lucide="scan-search" class="w-6 h-6 text-emerald-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_scraping_title">Web Scraping & Automatización</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_scraping_desc">Extracción automatizada de datos de cualquier sitio web. Monitoreo de precios, leads y competencia en piloto automático.</p>
+                    <p class="text-sm text-emerald-300 mt-3 font-medium" data-i18n="svc_scraping_result">✦ Resultado: Precios de competencia y leads diarios, automáticamente.</p>
+                </div>
+                <!-- Service 5: Data Analysis -->
+                <div class="service-card group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-amber-500/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-5">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/15 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bar-chart-3" class="w-6 h-6 text-amber-400"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_data_title">Análisis de Datos (ETL & Dashboards)</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_data_desc">Pipelines de datos, procesos ETL y dashboards interactivos para tomar decisiones basadas en datos reales.</p>
+                    <p class="text-sm text-amber-300 mt-3 font-medium" data-i18n="svc_data_result">✦ Resultado: Conoce tus números sin abrir una hoja de cálculo.</p>
+                </div>
+                <!-- Service 6: Voice AI Agents (NEW) — uses --color-danger -->
+                <div class="service-card svc-hover-danger group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-danger-rgb), 0.15);">
+                        <i data-lucide="phone-call" class="w-6 h-6 state-danger-text"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_voice_title">Agentes de Voz con IA</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_voice_desc">Agentes telefónicos con IA que atienden llamadas entrantes como recepcionistas Y realizan llamadas salientes para seguimiento de ventas, 24/7 sin tiempos de espera.</p>
+                    <p class="text-sm state-danger-text mt-3 font-medium" data-i18n="svc_voice_result">✦ Resultado: Nunca pierdas una llamada ni un lead por buzón de voz.</p>
+                </div>
+                <!-- Service 7: Lead Generation (NEW) — uses --color-success -->
+                <div class="service-card svc-hover-success group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-1">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-success-rgb), 0.15);">
+                        <i data-lucide="target" class="w-6 h-6 state-success-text"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_leads_title">Sistema de Generación de Leads</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_leads_desc">Un sistema de embudo completo que captura prospectos, los califica con IA y los nutre automáticamente hasta que estén listos para comprar, sin que tu equipo haga nada.</p>
+                    <p class="text-sm state-success-text mt-3 font-medium" data-i18n="svc_leads_result">✦ Resultado: Un pipeline que se llena solo mientras duermes.</p>
+                </div>
+                <!-- Service 8: Custom Software (NEW) -->
+                <div class="service-card svc-hover-accent group p-6 rounded-2xl border border-slate-800 bg-slate-900/40 hover:bg-slate-900/80 transition-all duration-300 reveal reveal-delay-2">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform" style="background: rgba(var(--color-accent-rgb), 0.15);">
+                        <i data-lucide="code-2" class="w-6 h-6 brand-text-accent"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2" data-i18n="svc_custom_title">Software a la Medida</h3>
+                    <p class="text-sm text-slate-400" data-i18n="svc_custom_desc">Si se puede construir, lo construimos. Desde herramientas internas y portales de clientes hasta aplicaciones personalizadas con IA — dinos qué necesitas y lo hacemos realidad.</p>
+                    <p class="text-sm brand-text-accent mt-3 font-medium" data-i18n="svc_custom_result">✦ Resultado: Software que se adapta a tu negocio, no al revés.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- SECTION DIVIDER -->
+    <div class="section-divider"></div>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="py-20 bg-slate-950">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="contact-glow p-10 md:p-16 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 reveal" data-i18n="contact_title">¿Listo para Automatizar tu Negocio?</h2>
+                <p class="text-slate-400 mb-3 max-w-xl mx-auto reveal" data-i18n="contact_subtitle">Agenda una auditoría gratuita de 30 minutos o escríbenos directamente por WhatsApp.</p>
+                <p class="brand-text font-semibold text-sm mb-10 reveal" data-i18n="contact_urgency">Solo aceptamos 3 nuevos clientes por mes.</p>
+                <div class="flex flex-wrap justify-center gap-4 reveal">
+                    <a href="https://calendar.app.google/eMvTYs113hdH7R157" target="_blank"
+                        class="brand-btn px-8 py-4 rounded-xl font-bold flex items-center">
+                        <i data-lucide="calendar" class="w-5 h-5 mr-2"></i>
+                        <span data-i18n="contact_cta_calendar">Agendar Auditoría Gratis</span>
+                    </a>
+                    <a href="https://wa.me/50244647474?text=Vi%20su%20sitio%20web%20y%20necesito%20ayuda%20con%20automatización"
+                        target="_blank"
+                        class="border border-slate-700 bg-slate-900 text-white px-8 py-4 rounded-xl font-bold hover:bg-slate-800 transition-all duration-200 flex items-center">
+                        <svg class="mr-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                        </svg>
+                        <span data-i18n="contact_cta_whatsapp">Escríbenos por WhatsApp</span>
+                    </a>
+                </div>
+                <!-- Trust icons -->
+                <div class="flex flex-wrap justify-center gap-6 mt-8 text-sm text-slate-500 reveal">
+                    <span data-i18n="contact_trust_1">&#128274; Sin compromiso</span>
+                    <span data-i18n="contact_trust_2">&#9889; Respuesta en 24h</span>
+                    <span data-i18n="contact_trust_3">&#127919; Enfocado en ROI</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-12 border-t border-slate-800 text-center">
+        <p class="text-slate-500 text-sm" data-i18n="footer_text">© 2024 AutoMate. Construido con código, impulsado por IA.</p>
+    </footer>
+
+    <!-- AI CHAT AGENT UI -->
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        <div id="chat-window"
+            class="hidden bg-slate-900 border border-slate-700 w-80 h-96 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="brand-bg p-4 flex justify-between items-center">
+                <span class="font-bold text-white text-sm" data-i18n="chat_title">Asistente de Automatización</span>
+                <button onclick="toggleChat()" class="text-white hover:text-slate-200"><i data-lucide="x"
+                        class="w-4 h-4"></i></button>
+            </div>
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-900 text-sm">
+                <div class="bg-slate-800 text-slate-200 p-3 rounded-lg rounded-tl-none self-start max-w-[85%]" data-i18n="chat_welcome">
+                    ¡Hola! Soy el Agente de IA. Pregúntame sobre n8n, nuestros servicios o cómo agendar una consulta.
+                </div>
+            </div>
+            <div class="p-3 bg-slate-950 border-t border-slate-800 flex gap-2">
+                <input type="text" id="user-input" data-i18n-placeholder="chat_placeholder"
+                    placeholder="Escribe aquí..."
+                    class="w-full bg-slate-900 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                <button onclick="sendMessage()" class="brand-bg brand-bg-hover text-white p-2 rounded-md transition-colors">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+        <button onclick="toggleCallForm()" aria-label="Request a call"
+            class="brand-bg brand-bg-hover text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all float-anim">
+            <i data-lucide="phone" class="w-7 h-7"></i>
+        </button>
+        <button onclick="toggleChat()" aria-label="Open chat"
+            class="brand-bg brand-bg-hover text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all float-anim">
+            <i data-lucide="message-square" class="w-7 h-7"></i>
+        </button>
+    </div>
+
+    <!-- CALL REQUEST MODAL -->
+    <div id="call-modal" class="hidden fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onclick="if(event.target===this)toggleCallForm()">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="brand-bg p-4 flex justify-between items-center sticky top-0">
+                <span class="font-bold text-white text-base" data-i18n="call_form_title">Solicita una llamada</span>
+                <button onclick="toggleCallForm()" class="text-white hover:text-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="call-form" class="p-5 space-y-4" onsubmit="submitCallForm(event)">
+                <p class="text-slate-400 text-sm" data-i18n="call_form_subtitle">Llena el formulario y nuestra IA te llamará en minutos.</p>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-300 text-xs mb-1" data-i18n="call_form_firstname">Nombre</label>
+                        <input required type="text" name="firstName"
+                            class="w-full bg-slate-950 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 text-xs mb-1" data-i18n="call_form_lastname">Apellido</label>
+                        <input required type="text" name="lastName"
+                            class="w-full bg-slate-950 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 text-xs mb-1" data-i18n="call_form_country">País</label>
+                    <select required name="country" id="call-country" onchange="updateDialCode()"
+                        class="w-full bg-slate-950 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                        <!-- populated by JS -->
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 text-xs mb-1" data-i18n="call_form_phone">Teléfono</label>
+                    <div class="flex gap-2">
+                        <span id="call-dialcode" class="bg-slate-950 text-slate-300 text-sm border border-slate-700 rounded-md px-3 py-2 min-w-[80px] text-center">+502</span>
+                        <input required type="tel" name="phone" inputmode="numeric" pattern="[0-9 \-]+"
+                            class="flex-1 bg-slate-950 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 text-xs mb-1" data-i18n="call_form_service">¿Qué servicio te interesa?</label>
+                    <select required name="service"
+                        class="w-full bg-slate-950 text-white text-sm border border-slate-700 rounded-md px-3 py-2 focus:outline-none brand-border-focus">
+                        <option value="" data-i18n="call_form_service_placeholder">Selecciona un servicio...</option>
+                        <option value="General Consultancy" data-i18n="call_service_general">Consultoría General</option>
+                        <option value="AI Chatbots" data-i18n="call_service_chatbots">Chatbots con IA</option>
+                        <option value="Voice AI Agents" data-i18n="call_service_voice">Agentes de Voz con IA</option>
+                        <option value="Web Design" data-i18n="call_service_web">Diseño Web</option>
+                        <option value="App Development" data-i18n="call_service_app">Desarrollo de Apps</option>
+                        <option value="Data Analysis and Business Intelligence" data-i18n="call_service_data">Análisis de Datos e Inteligencia de Negocio</option>
+                        <option value="Lead Generation" data-i18n="call_service_leads">Generación de Leads</option>
+                    </select>
+                </div>
+
+                <!-- honeypot -->
+                <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
+
+                <button type="submit" id="call-submit"
+                    class="w-full brand-bg brand-bg-hover text-white font-bold py-3 rounded-md transition-colors flex items-center justify-center gap-2">
+                    <i data-lucide="phone-call" class="w-4 h-4"></i>
+                    <span data-i18n="call_form_submit">Solicitar llamada</span>
+                </button>
+
+                <p id="call-form-status" class="text-sm text-center hidden"></p>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ===== INTERNATIONALIZATION (i18n) =====
+        const translations = {
+            es: {
+                // Nav
+                nav_services: "Servicios",
+                nav_demos: "Vélo en Acción",
+                nav_contact: "Contáctanos",
+                nav_cta: "Auditoría Gratis 30 Min",
+                watch_demo: "Ver Demo",
+                nav_ai_agents: "Agentes de IA",
+                nav_ai_agents_desc: "Chatbots y asistentes inteligentes",
+                nav_web_dev: "Desarrollo Web",
+                nav_web_dev_desc: "Sitios web modernos y rápidos",
+                nav_app_building: "Desarrollo de Apps",
+                nav_app_building_desc: "Aplicaciones móviles y de escritorio",
+                nav_scraping: "Web Scraping & Automatización",
+                nav_scraping_desc: "Extracción de datos automatizada",
+                nav_data_analysis: "Análisis de Datos (ETL & Dashboards)",
+                nav_data_analysis_desc: "Pipelines de datos y visualización",
+                nav_voice_agents: "Agentes de Voz con IA",
+                nav_voice_agents_desc: "IA telefónica entrante y saliente",
+                nav_leads: "Sistema de Generación de Leads",
+                nav_leads_desc: "Embudo automatizado completo",
+                nav_custom_software: "Software a la Medida",
+                nav_custom_software_desc: "Construido exactamente a tu medida",
+
+                // Hero
+                hero_badge: "Ahorra +10 Horas/Semana por Empleado",
+                hero_title_1: "Deja de Hacer ",
+                hero_title_2: "Trabajo Aburrido.",
+                hero_description: 'Tu equipo pierde horas en tareas que una herramienta de $10/mes podría resolver. Construimos las automatizaciones que los liberan — a ellos y a ti — para enfocarse en lo que realmente hace crecer tu negocio.',
+                hero_cta_demo: "Agendar Demo",
+                hero_cta_whatsapp: "Escríbenos por WhatsApp",
+                hero_social_proof: "Más de 10 empresas confían en nosotros",
+
+                // Tech
+                tech_title: "Impulsado por Tecnología Moderna",
+
+                // Pain Points
+                pain_title: "¿Te suena familiar?",
+                pain_subtitle: "Estos son los problemas que eliminamos para nuestros clientes.",
+                pain_before_label: "Antes",
+                pain_after_label: "Después",
+                pain_1_before: "Copiando datos manualmente entre hojas de cálculo todos los días",
+                pain_1_after: "Los datos fluyen automáticamente entre todas tus herramientas",
+                pain_2_before: "Perdiendo leads porque nadie respondió a tiempo",
+                pain_2_after: "Un agente de IA responde a cada lead en menos de 60 segundos, 24/7",
+                pain_3_before: "Tu equipo pasa horas en trabajo administrativo repetitivo",
+                pain_3_after: "Los flujos de trabajo corren en piloto automático. Tu equipo se enfoca en trabajo real",
+
+                // How It Works
+                how_title: "Así Funciona",
+                how_subtitle: "De la primera llamada a resultados reales en 3 pasos simples.",
+                how_step1_title: "Auditoría Gratis de 30 Min",
+                how_step1_desc: "Mapeamos tus mayores pérdidas de tiempo e identificamos las 2-3 automatizaciones con mayor retorno de inversión.",
+                how_step2_title: "Lo Construimos",
+                how_step2_desc: "En 1-2 semanas, tu flujo de trabajo personalizado está activo. No necesitas escribir código.",
+                how_step3_title: "Ahorras Tiempo",
+                how_step3_desc: "Tu equipo recupera horas cada semana mientras los leads y datos fluyen automáticamente.",
+
+                // Services
+                services_title: "Nuestros Servicios",
+                services_subtitle: "Soluciones tecnológicas integrales para impulsar tu negocio al siguiente nivel.",
+                svc_ai_title: "Agentes de IA",
+                svc_ai_desc: "Chatbots inteligentes y agentes conversacionales para WhatsApp, Messenger y tu sitio web que atienden clientes 24/7.",
+                svc_ai_result: "✦ Resultado: Responde al 100% de consultas, incluso a las 2am.",
+                svc_web_title: "Desarrollo Web",
+                svc_web_desc: "Sitios web modernos, rápidos y optimizados para SEO que convierten visitantes en clientes.",
+                svc_web_result: "✦ Resultado: Sitios que cargan en <2s y posicionan en Google.",
+                svc_app_title: "Desarrollo de Apps",
+                svc_app_desc: "Aplicaciones móviles y de escritorio a medida para optimizar los procesos de tu empresa.",
+                svc_app_result: "✦ Resultado: Reemplaza procesos manuales con flujos de un clic.",
+                svc_scraping_title: "Web Scraping & Automatización",
+                svc_scraping_desc: "Extracción automatizada de datos de cualquier sitio web. Monitoreo de precios, leads y competencia en piloto automático.",
+                svc_scraping_result: "✦ Resultado: Precios de competencia y leads diarios, automáticamente.",
+                svc_data_title: "Análisis de Datos (ETL & Dashboards)",
+                svc_data_desc: "Pipelines de datos, procesos ETL y dashboards interactivos para tomar decisiones basadas en datos reales.",
+                svc_data_result: "✦ Resultado: Conoce tus números sin abrir una hoja de cálculo.",
+                svc_voice_title: "Agentes de Voz con IA",
+                svc_voice_desc: "Agentes telefónicos con IA que atienden llamadas entrantes como recepcionistas Y realizan llamadas salientes para seguimiento de ventas, 24/7 sin tiempos de espera.",
+                svc_voice_result: "✦ Resultado: Nunca pierdas una llamada ni un lead por buzón de voz.",
+                svc_leads_title: "Sistema de Generación de Leads",
+                svc_leads_desc: "Un sistema de embudo completo que captura prospectos, los califica con IA y los nutre automáticamente hasta que estén listos para comprar, sin que tu equipo haga nada.",
+                svc_leads_result: "✦ Resultado: Un pipeline que se llena solo mientras duermes.",
+                svc_custom_title: "Software a la Medida",
+                svc_custom_desc: "Si se puede construir, lo construimos. Desde herramientas internas y portales de clientes hasta aplicaciones personalizadas con IA — dinos qué necesitas y lo hacemos realidad.",
+                svc_custom_result: "✦ Resultado: Software que se adapta a tu negocio, no al revés.",
+
+                // Portfolio
+                portfolio_title: "Mira la Automatización en Acción",
+                p1_title: "Desarrollo de App",
+                p1_desc: 'Lectura automática de datos desde imágenes subidas y procesamiento inteligente. <strong>Ahorro al cliente: 1 hr/día.</strong>',
+                p1_badge: "Ahorra 1 hr/día",
+                p2_title: "Recordatorios de Pago Inteligentes",
+                p2_desc: "Consulta una hoja de cálculo para verificar quién debe pagar y envía un correo personalizado automáticamente.",
+                p2_badge: "Cero pagos perdidos",
+                p3_title: "Agente IA WhatsApp + CRM",
+                p3_desc: "Agente de IA para WhatsApp que maneja conversaciones y registra leads automáticamente en tu CRM.",
+                p3_badge: "Captura de leads 24/7",
+                p4_title: "Chatbot IA Messenger para Reservaciones",
+                p4_desc: "Chatbot de Messenger con IA que gestiona reservas de citas y rastrea leads automáticamente.",
+                p4_badge: "Reservas en piloto automático",
+                p5_title: "Descargador de Adjuntos + Carga a BD",
+                p5_desc: "Descarga automática de adjuntos de correo y carga organizada a tu base de datos.",
+                p5_badge: "Bandeja → BD en segundos",
+                p6_title: "Extractor de Correos, Clasificador e Inserción a CRM",
+                p6_desc: "Extrae datos de correos, los clasifica con IA y los inserta automáticamente en tu CRM.",
+                p6_badge: "Leads auto-clasificados",
+
+                // Contact
+                contact_title: "¿Listo para Automatizar tu Negocio?",
+                contact_subtitle: "Agenda una auditoría gratuita de 30 minutos o escríbenos directamente por WhatsApp.",
+                contact_urgency: "Solo aceptamos 3 nuevos clientes por mes.",
+                contact_cta_calendar: "Agendar Auditoría Gratis",
+                contact_cta_whatsapp: "Escríbenos por WhatsApp",
+                contact_trust_1: "&#128274; Sin compromiso",
+                contact_trust_2: "&#9889; Respuesta en 24h",
+                contact_trust_3: "&#127919; Enfocado en ROI",
+
+                // Footer
+                footer_text: "© 2024 AutoMate. Construido con código, impulsado por IA.",
+
+                // Chat
+                chat_title: "Asistente de Automatización",
+                chat_welcome: "¡Hola! Soy el Agente de IA. Pregúntame sobre n8n, nuestros servicios o cómo agendar una consulta.",
+                chat_placeholder: "Escribe aquí...",
+
+                // Call form
+                call_form_title: "Solicita una llamada",
+                call_form_subtitle: "Llena el formulario y nuestra IA te llamará en minutos.",
+                call_form_firstname: "Nombre",
+                call_form_lastname: "Apellido",
+                call_form_country: "País",
+                call_form_phone: "Teléfono",
+                call_form_service: "¿Qué servicio te interesa?",
+                call_form_service_placeholder: "Selecciona un servicio...",
+                call_service_general: "Consultoría General",
+                call_service_chatbots: "Chatbots con IA",
+                call_service_voice: "Agentes de Voz con IA",
+                call_service_web: "Diseño Web",
+                call_service_app: "Desarrollo de Apps",
+                call_service_data: "Análisis de Datos e Inteligencia de Negocio",
+                call_service_leads: "Generación de Leads",
+                call_form_submit: "Solicitar llamada",
+            },
+            en: {
+                // Nav
+                nav_services: "Services",
+                nav_demos: "See It In Action",
+                nav_contact: "Contact Us",
+                nav_cta: "Free 30-Min Audit",
+                watch_demo: "Watch Demo",
+                nav_ai_agents: "AI Agents",
+                nav_ai_agents_desc: "Intelligent chatbots & assistants",
+                nav_web_dev: "Website Development",
+                nav_web_dev_desc: "Modern, fast websites",
+                nav_app_building: "App Building",
+                nav_app_building_desc: "Mobile & desktop applications",
+                nav_scraping: "Web Scraping Automation",
+                nav_scraping_desc: "Automated data extraction",
+                nav_data_analysis: "Data Analysis Service (ETL & Dashboards)",
+                nav_data_analysis_desc: "Data pipelines & visualization",
+                nav_voice_agents: "Voice AI Agents",
+                nav_voice_agents_desc: "Inbound & outbound phone AI",
+                nav_leads: "Lead Generation System",
+                nav_leads_desc: "Full-funnel automated pipeline",
+                nav_custom_software: "Custom Software",
+                nav_custom_software_desc: "Built exactly to your specs",
+
+                // Hero
+                hero_badge: "Save 10+ Hours Per Week Per Employee",
+                hero_title_1: "Stop Doing ",
+                hero_title_2: "Boring Work.",
+                hero_description: 'Your team is stuck doing work a $10/month tool could handle. We build the automations that free them — and you — to focus on what actually grows your business.',
+                hero_cta_demo: "Book a Demo",
+                hero_cta_whatsapp: "WhatsApp Us",
+                hero_social_proof: "Trusted by 10+ businesses",
+
+                // Tech
+                tech_title: "Powered by Modern Tech",
+
+                // Pain Points
+                pain_title: "Sound familiar?",
+                pain_subtitle: "These are the problems we eliminate for our clients.",
+                pain_before_label: "Before",
+                pain_after_label: "After",
+                pain_1_before: "Manually copying data between spreadsheets every day",
+                pain_1_after: "Data flows automatically between all your tools",
+                pain_2_before: "Missing leads because nobody replied fast enough",
+                pain_2_after: "AI agent responds to every lead in under 60 seconds, 24/7",
+                pain_3_before: "Your team spends hours on repetitive admin work",
+                pain_3_after: "Workflows run on autopilot. Your team focuses on real work",
+
+                // How It Works
+                how_title: "How It Works",
+                how_subtitle: "From first call to real results in 3 simple steps.",
+                how_step1_title: "Free 30-Min Audit",
+                how_step1_desc: "We map your biggest time-wasters and identify the 2-3 automations with the highest ROI.",
+                how_step2_title: "We Build It",
+                how_step2_desc: "In 1–2 weeks, your custom workflow is live. No code needed from your side.",
+                how_step3_title: "You Save Time",
+                how_step3_desc: "Watch your team reclaim hours every week while leads and data flow automatically.",
+
+                // Services
+                services_title: "Our Services",
+                services_subtitle: "Comprehensive tech solutions to take your business to the next level.",
+                svc_ai_title: "AI Agents",
+                svc_ai_desc: "Intelligent chatbots and conversational agents for WhatsApp, Messenger, and your website that serve customers 24/7.",
+                svc_ai_result: "✦ Result: Respond to 100% of inquiries, even at 2am.",
+                svc_web_title: "Website Development",
+                svc_web_desc: "Modern, fast, SEO-optimized websites that convert visitors into customers.",
+                svc_web_result: "✦ Result: Sites that load in <2s and rank on Google.",
+                svc_app_title: "App Building",
+                svc_app_desc: "Custom mobile and desktop applications to optimize your business processes.",
+                svc_app_result: "✦ Result: Replace manual processes with one-click workflows.",
+                svc_scraping_title: "Web Scraping Automation",
+                svc_scraping_desc: "Automated data extraction from any website. Price monitoring, leads, and competitor tracking on autopilot.",
+                svc_scraping_result: "✦ Result: Get competitor pricing & leads daily, automatically.",
+                svc_data_title: "Data Analysis Service (ETL & Dashboards)",
+                svc_data_desc: "Data pipelines, ETL processes, and interactive dashboards for data-driven decision making.",
+                svc_data_result: "✦ Result: Know your numbers without opening a spreadsheet.",
+                svc_voice_title: "Voice AI Agents",
+                svc_voice_desc: "AI-powered phone agents that handle inbound calls like a receptionist AND make outbound calls for sales follow-ups — 24/7, with no hold times.",
+                svc_voice_result: "✦ Result: Never miss a call. Never lose a lead to voicemail.",
+                svc_leads_title: "Lead Generation System",
+                svc_leads_desc: "A full-funnel system that captures prospects, qualifies them with AI, and nurtures them automatically until they're ready to buy — without your team lifting a finger.",
+                svc_leads_result: "✦ Result: A pipeline that fills itself while you sleep.",
+                svc_custom_title: "Custom Software",
+                svc_custom_desc: "If it can be built, we build it. From internal tools and client portals to fully custom AI-powered applications — spec it out and we make it real.",
+                svc_custom_result: "✦ Result: Software that fits your business exactly, not the other way around.",
+
+                // Portfolio
+                portfolio_title: "See The Automation In Action",
+                p1_title: "App Development",
+                p1_desc: 'Automatically reading data from uploaded images and processing it. <strong>Saved Client: 1 hr/day.</strong>',
+                p1_badge: "Saves 1 hr/day",
+                p2_title: "Smart Payment Reminders",
+                p2_desc: "Consults a spreadsheet to check who is due for payment and sends a customized, personalized email automatically.",
+                p2_badge: "Zero missed payments",
+                p3_title: "AI Agent WhatsApp + CRM Recorder",
+                p3_desc: "Intelligent WhatsApp AI agent that handles conversations and automatically logs leads to your CRM spreadsheet.",
+                p3_badge: "24/7 lead capture",
+                p4_title: "Messenger AI Chatbot Bookings",
+                p4_desc: "AI-powered Messenger chatbot that handles appointment bookings and tracks leads automatically.",
+                p4_badge: "Bookings on autopilot",
+                p5_title: "Email Attachments Downloader + DB Uploader",
+                p5_desc: "Automatically downloads email attachments and uploads them to your database for organized storage.",
+                p5_badge: "Inbox → DB in seconds",
+                p6_title: "Email Extractor, Classifier & CRM Inserter",
+                p6_desc: "Extracts data from emails, classifies them using AI, and automatically inserts leads into your CRM.",
+                p6_badge: "Leads auto-sorted & filed",
+
+                // Contact
+                contact_title: "Ready to Automate Your Business?",
+                contact_subtitle: "Book a free 30-minute audit or reach us directly via WhatsApp.",
+                contact_urgency: "We only take on 3 new clients per month.",
+                contact_cta_calendar: "Book Free Audit",
+                contact_cta_whatsapp: "WhatsApp Us",
+                contact_trust_1: "&#128274; No commitment",
+                contact_trust_2: "&#9889; Response in 24h",
+                contact_trust_3: "&#127919; ROI-focused",
+
+                // Footer
+                footer_text: "© 2024 AutoMate. Built with code, powered by AI.",
+
+                // Chat
+                chat_title: "Automation Assistant",
+                chat_welcome: "Hi! I'm the AI Agent. Ask me about n8n, our services, or how to book a consultation.",
+                chat_placeholder: "Type here...",
+
+                // Call form
+                call_form_title: "Request a call",
+                call_form_subtitle: "Fill the form and our AI will call you in minutes.",
+                call_form_firstname: "First name",
+                call_form_lastname: "Last name",
+                call_form_country: "Country",
+                call_form_phone: "Phone",
+                call_form_service: "Which service are you interested in?",
+                call_form_service_placeholder: "Select a service...",
+                call_service_general: "General Consultancy",
+                call_service_chatbots: "AI Chatbots",
+                call_service_voice: "Voice AI Agents",
+                call_service_web: "Web Design",
+                call_service_app: "App Development",
+                call_service_data: "Data Analysis and Business Intelligence",
+                call_service_leads: "Lead Generation",
+                call_form_submit: "Request a call",
+            }
+        };
+
+        let currentLang = 'es';
+
+        function switchLang(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+
+            // Update page title
+            document.title = lang === 'es'
+                ? 'AutoMate | Agencia de Automatización con IA'
+                : 'AutoMate | AI Automation Agency';
+
+            // Update all translatable elements
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Update placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Update WhatsApp links
+            const waText = lang === 'es'
+                ? 'Vi%20su%20sitio%20web%20y%20necesito%20ayuda%20con%20automatización'
+                : 'I%20saw%20your%20website%20and%20need%20automation%20help';
+            document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+                a.href = `https://wa.me/50244647474?text=${waText}`;
+            });
+
+            // Update active button state
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            });
+
+            // Re-init lucide icons for new content
+            lucide.createIcons();
+        }
+
+        // ===== NAVIGATION =====
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('open');
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.remove('open');
+            const submenu = document.getElementById('mobile-submenu');
+            submenu.classList.remove('open');
+        }
+
+        function toggleMobileSubmenu() {
+            const submenu = document.getElementById('mobile-submenu');
+            submenu.classList.toggle('open');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const navItem = document.querySelector('.nav-item');
+            if (navItem && !navItem.contains(e.target)) {
+                const dropdown = navItem.querySelector('.nav-dropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+
+        // ===== CHAT =====
+        lucide.createIcons();
+        const chatWindow = document.getElementById('chat-window');
+        const messagesContainer = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+
+        // IMPORTANT: PASTE YOUR N8N WEBHOOK URL INSIDE THE QUOTES BELOW
+        const N8N_WEBHOOK_URL = "https://brianiboyr.app.n8n.cloud/webhook/chat";
+
+        function toggleChat() { chatWindow.classList.toggle('hidden'); }
+
+        async function sendMessage() {
+            const text = userInput.value;
+            if (!text) return;
+            addMessage(text, 'user');
+            userInput.value = '';
+            const thinkingText = currentLang === 'es' ? 'Pensando...' : 'Thinking...';
+            const loadingId = addMessage(thinkingText, 'ai');
+
+            if (N8N_WEBHOOK_URL === "") {
+                // FALLBACK IF NO WEBHOOK IS CONNECTED YET
+                setTimeout(() => {
+                    document.getElementById(loadingId).remove();
+                    const fallbackMsg = currentLang === 'es'
+                        ? "¡Estoy listo para trabajar! Por favor crea el flujo de trabajo n8n proporcionado y pega la URL del Webhook en el código."
+                        : "I am ready to work! Please create the n8n workflow provided and paste the Webhook URL in the code.";
+                    addMessage(fallbackMsg, 'ai');
+                }, 1000);
+                return;
+            }
+
+            try {
+                // SEND DATA TO N8N
+                const response = await fetch(N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chatInput: text })
+                });
+                const data = await response.json();
+                document.getElementById(loadingId).remove();
+                addMessage(data.output, 'ai'); // n8n must return JSON with property "output"
+            } catch (error) {
+                console.error(error);
+                document.getElementById(loadingId).remove();
+                const errMsg = currentLang === 'es' ? "Error al conectar con el servidor." : "Error connecting to server.";
+                addMessage(errMsg, 'ai');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.id = Math.random().toString(36).substring(7);
+            div.className = sender === 'user'
+                ? 'brand-bg text-white p-3 rounded-lg rounded-tr-none self-end max-w-[85%] ml-auto'
+                : 'bg-slate-800 text-slate-200 p-3 rounded-lg rounded-tl-none self-start max-w-[85%]';
+            div.innerHTML = text;
+            messagesContainer.appendChild(div);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return div.id;
+        }
+
+        userInput.addEventListener('keypress', function (e) { if (e.key === 'Enter') sendMessage(); });
+
+        // ===== CALL REQUEST FORM =====
+        const CALL_WEBHOOK_URL = "https://n8n.srv1504778.hstgr.cloud/webhook/3d961f4f-4012-4d50-99f4-f1127b97cc87";
+
+        const COUNTRIES = [
+            { name: "Guatemala", code: "GT", dial: "+502", flag: "🇬🇹" },
+            { name: "United States", code: "US", dial: "+1", flag: "🇺🇸" },
+            { name: "Canada", code: "CA", dial: "+1", flag: "🇨🇦" },
+            { name: "Mexico", code: "MX", dial: "+52", flag: "🇲🇽" },
+            { name: "Spain", code: "ES", dial: "+34", flag: "🇪🇸" },
+            { name: "Argentina", code: "AR", dial: "+54", flag: "🇦🇷" },
+            { name: "Australia", code: "AU", dial: "+61", flag: "🇦🇺" },
+            { name: "Belize", code: "BZ", dial: "+501", flag: "🇧🇿" },
+            { name: "Bolivia", code: "BO", dial: "+591", flag: "🇧🇴" },
+            { name: "Brazil", code: "BR", dial: "+55", flag: "🇧🇷" },
+            { name: "Chile", code: "CL", dial: "+56", flag: "🇨🇱" },
+            { name: "Colombia", code: "CO", dial: "+57", flag: "🇨🇴" },
+            { name: "Costa Rica", code: "CR", dial: "+506", flag: "🇨🇷" },
+            { name: "Cuba", code: "CU", dial: "+53", flag: "🇨🇺" },
+            { name: "Dominican Republic", code: "DO", dial: "+1", flag: "🇩🇴" },
+            { name: "Ecuador", code: "EC", dial: "+593", flag: "🇪🇨" },
+            { name: "El Salvador", code: "SV", dial: "+503", flag: "🇸🇻" },
+            { name: "France", code: "FR", dial: "+33", flag: "🇫🇷" },
+            { name: "Germany", code: "DE", dial: "+49", flag: "🇩🇪" },
+            { name: "Honduras", code: "HN", dial: "+504", flag: "🇭🇳" },
+            { name: "India", code: "IN", dial: "+91", flag: "🇮🇳" },
+            { name: "Italy", code: "IT", dial: "+39", flag: "🇮🇹" },
+            { name: "Japan", code: "JP", dial: "+81", flag: "🇯🇵" },
+            { name: "Netherlands", code: "NL", dial: "+31", flag: "🇳🇱" },
+            { name: "Nicaragua", code: "NI", dial: "+505", flag: "🇳🇮" },
+            { name: "Panama", code: "PA", dial: "+507", flag: "🇵🇦" },
+            { name: "Paraguay", code: "PY", dial: "+595", flag: "🇵🇾" },
+            { name: "Peru", code: "PE", dial: "+51", flag: "🇵🇪" },
+            { name: "Portugal", code: "PT", dial: "+351", flag: "🇵🇹" },
+            { name: "Puerto Rico", code: "PR", dial: "+1", flag: "🇵🇷" },
+            { name: "United Kingdom", code: "GB", dial: "+44", flag: "🇬🇧" },
+            { name: "Uruguay", code: "UY", dial: "+598", flag: "🇺🇾" },
+            { name: "Venezuela", code: "VE", dial: "+58", flag: "🇻🇪" }
+        ];
+
+        const callModal = document.getElementById('call-modal');
+        const callCountrySelect = document.getElementById('call-country');
+        const callDialCodeEl = document.getElementById('call-dialcode');
+        const callForm = document.getElementById('call-form');
+        const callStatus = document.getElementById('call-form-status');
+        const callSubmitBtn = document.getElementById('call-submit');
+
+        function populateCountries() {
+            const sorted = [...COUNTRIES].sort((a, b) => a.name.localeCompare(b.name));
+            // pin Guatemala on top as default
+            const gt = sorted.find(c => c.code === 'GT');
+            const others = sorted.filter(c => c.code !== 'GT');
+            const list = gt ? [gt, ...others] : sorted;
+            callCountrySelect.innerHTML = list.map(c =>
+                `<option value="${c.code}" data-dial="${c.dial}" data-name="${c.name}">${c.flag} ${c.name} (${c.dial})</option>`
+            ).join('');
+            updateDialCode();
+        }
+
+        function updateDialCode() {
+            const opt = callCountrySelect.options[callCountrySelect.selectedIndex];
+            if (opt) callDialCodeEl.textContent = opt.dataset.dial;
+        }
+
+        function toggleCallForm() {
+            callModal.classList.toggle('hidden');
+            if (!callModal.classList.contains('hidden')) {
+                lucide.createIcons();
+            }
+        }
+
+        async function submitCallForm(e) {
+            e.preventDefault();
+            const fd = new FormData(callForm);
+
+            // honeypot — silently drop bots
+            if (fd.get('website')) return;
+
+            const opt = callCountrySelect.options[callCountrySelect.selectedIndex];
+            const payload = {
+                firstName: fd.get('firstName').trim(),
+                lastName: fd.get('lastName').trim(),
+                country: opt ? opt.dataset.name : '',
+                countryCode: fd.get('country'),
+                dialCode: opt ? opt.dataset.dial : '',
+                phone: fd.get('phone').replace(/[^0-9]/g, ''),
+                fullPhone: (opt ? opt.dataset.dial : '') + fd.get('phone').replace(/[^0-9]/g, ''),
+                service: fd.get('service'),
+                language: currentLang,
+                submittedAt: new Date().toISOString(),
+                source: 'website-call-bubble'
+            };
+
+            callSubmitBtn.disabled = true;
+            callSubmitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+            const sendingTxt = currentLang === 'es' ? 'Enviando...' : 'Sending...';
+            callSubmitBtn.querySelector('span').textContent = sendingTxt;
+
+            try {
+                const res = await fetch(CALL_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                callStatus.textContent = currentLang === 'es'
+                    ? '¡Listo! Te llamaremos en breve.'
+                    : "All set! We'll call you shortly.";
+                callStatus.className = 'text-sm text-center text-green-400';
+                callStatus.classList.remove('hidden');
+                callForm.reset();
+                updateDialCode();
+
+                setTimeout(() => {
+                    toggleCallForm();
+                    callStatus.classList.add('hidden');
+                }, 2200);
+            } catch (err) {
+                console.error(err);
+                callStatus.textContent = currentLang === 'es'
+                    ? 'Error al enviar. Intenta de nuevo o escríbenos por WhatsApp.'
+                    : 'Submission error. Please try again or message us on WhatsApp.';
+                callStatus.className = 'text-sm text-center text-red-400';
+                callStatus.classList.remove('hidden');
+            } finally {
+                callSubmitBtn.disabled = false;
+                callSubmitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+                const submitTxt = currentLang === 'es' ? 'Solicitar llamada' : 'Request a call';
+                callSubmitBtn.querySelector('span').textContent = submitTxt;
+            }
+        }
+
+        populateCountries();
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+
+</html>
